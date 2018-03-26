@@ -4,8 +4,42 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "1b0072fb8e24bf70e7c347363c3df8b7",
+    "content-hash": "3a8026a4110852a7e33c48204c56ccb2",
     "packages": [
+        {
+            "name": "daniel-duarte/php-openspec",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/daniel-duarte/php-openspec.git",
+                "reference": "5a2b81d674d499ebe52f0b011df386fd917d966f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/daniel-duarte/php-openspec/zipball/5a2b81d674d499ebe52f0b011df386fd917d966f",
+                "reference": "5a2b81d674d499ebe52f0b011df386fd917d966f",
+                "shasum": ""
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^7"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "OpenSpec\\": "src/OpenSpec"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "OpenSpec PHP",
+            "homepage": "https://github.com/daniel-duarte/php-openspec/blob/master/README.md",
+            "support": {
+                "source": "https://github.com/daniel-duarte/php-openspec/tree/master",
+                "issues": "https://github.com/daniel-duarte/php-openspec/issues"
+            },
+            "time": "2018-03-26T05:33:50+00:00"
+        },
         {
             "name": "symfony/yaml",
             "version": "v4.0.6",

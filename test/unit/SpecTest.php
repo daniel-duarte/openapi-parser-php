@@ -8,9 +8,9 @@ use GenericEntity\Spec\ObjectSpec;
 
 final class SpecTest extends TestCase
 {
-    public function testSpecs(): void
+    public function runTestSpecs($dirpath): void
     {
-        $specFilesExpr = __DIR__ . '/cases/specs/*.spec.yml';
+        $specFilesExpr = $dirpath . '*.spec.yml';
         $specFiles = glob($specFilesExpr);
 
         foreach ($specFiles as $specFilepath) {
@@ -22,27 +22,32 @@ final class SpecTest extends TestCase
 
             try {
 
-                if ($userSpecData['type'] === 'object') {
-                    $userSpec = new ObjectSpec($userSpecData);
-                } elseif ($userSpecData['type'] === 'array') {
-                    $userSpec = new ArraySpec($userSpecData);
-                }
+                $userSpec = \OpenSpec\SpecBuilder::getInstance()->build($userSpecData);
 
                 $specErrors = [];
-            } catch (\GenericEntity\SpecException $ex) {
+            } catch (\OpenSpec\ParseSpecException $ex) {
                 $specErrors = $ex->getErrors();
             }
 
+            $specErrors = array_column($specErrors, 1);
             $this->assertTrue(count($specErrors) === 0, "User spec not valid in file '$specSampleFilepath':" . PHP_EOL .
                 '- ' . implode(PHP_EOL . '- ', $specErrors)
             );
 
             if (count($specErrors) === 0) {
-                $errors = $userSpec->validate($userSpecSampleData);
-                $this->assertTrue(count($errors) === 0, "User data in file '$specSampleFilepath' does not follow the spec in file '$specFilepath':" . PHP_EOL .
-                    '- ' . implode(PHP_EOL . '- ', $errors)
-                );
+                $valid = $userSpec->validate($userSpecSampleData);
+                $this->assertTrue($valid, "User data in file '$specSampleFilepath' does not follow the spec in file '$specFilepath'.");
             }
         }
+    }
+
+    public function testBasicSpecs()
+    {
+        $this->runTestSpecs(__DIR__ . '/cases/specs/');
+    }
+
+    public function testOpenApiSpecs()
+    {
+        $this->runTestSpecs(__DIR__ . '/cases/openapi/');
     }
 }

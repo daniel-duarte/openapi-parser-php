@@ -2,15 +2,21 @@
   "autoload": {
     "psr-4": {
       "OpenApi\\": "src/OpenApi",
-      "GenericEntity\\": "src/GenericEntity",
-      "OpenSpec\\": "src/OpenSpec"
+      "GenericEntity\\": "src/GenericEntity"
     }
   },
   "require": {
-    "symfony/yaml": "^4.0"
+    "symfony/yaml": "^4.0",
+    "daniel-duarte/php-openspec": "^1.0"
   },
   "require-dev": {
     "behat/behat": "^3.4",
     "phpunit/phpunit": "^7"
-  }
+  },
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/daniel-duarte/php-openspec"
+    }
+  ]
 }
