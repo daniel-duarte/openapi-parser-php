@@ -35,8 +35,9 @@ final class SpecTest extends TestCase
             );
 
             if (count($specErrors) === 0) {
-                $valid = $userSpec->validate($userSpecSampleData);
-                $this->assertTrue($valid, "User data in file '$specSampleFilepath' does not follow the spec in file '$specFilepath'.");
+                $errors = $userSpec->validateGetErrors($userSpecSampleData);
+                $this->assertTrue(count($errors) === 0, "User data in file '$specSampleFilepath' does not follow the spec in file '$specFilepath'." . PHP_EOL .
+                    '- ' . implode(PHP_EOL . '- ', array_column($errors, 1)));
             }
         }
     }

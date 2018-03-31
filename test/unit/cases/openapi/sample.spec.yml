@@ -63,7 +63,7 @@ fields:
     fields: {}
     extensionFields:
       type: object
-      extensible: true # @todo remove this extensible when the spec is complete
+      #extensible: true # @todo remove this extensible when the spec is complete
       fields:
         $ref:
           type: string
@@ -114,48 +114,124 @@ fields:
                     fields:
                       $ref:
                         type: string
-#            requestBody:
-#              type: mixed
-#              - type: object
-#                fields:
-#                  description:
-#                    type: string
-#                  content:
-#                    type: object
-#                    extensible: true
-#                    fields: {}
-#                    extensionFields:
-#                      type: object
-#                      fields:
-#                        schema:
-#                          type: mixed
-#                          options:
-#                            - type: object
-#                              fields:
-#                            - type: object
-#                        example:
-#                        examples:
-#                        encoding:
-#                  required:
-#                    type: boolean
-#              - type: object
-#                fields:
-#                  $ref:
-#                    type: string
-
-
-
-
-
-
-
-
-
+            requestBody:
+              type: mixed
+              options:
+                - type: object
+                  fields:
+                    description:
+                      type: string
+                    content:
+                      type: object
+                      extensible: true
+                      fields: {}
+                      extensionFields:
+                        type: object
+                        fields:
+                          schema:
+                            type: mixed
+                            options:
+                              - type: object
+                                fields:
+                                  type:
+                                    type: string
+                                    # @todo complete schema fields according to https://github.com/OAI/OpenAPI-Specification/blob/3.0.1/versions/3.0.1.md#schemaObject
+                              - type: object
+                                fields:
+                                  $ref:
+                                    type: string
+                          example:
+                            type: mixed
+                            options:
+                              - type: 'null'
+                              - type: boolean
+                              - type: string
+                              - type: object
+                                extensible: true
+                              - type: array
+                          examples:
+                            type: object
+                            extensible: true
+                            extensionFields:
+                              type: mixed
+                              options:
+                                - type: object
+                                  fields:
+                                    summary:
+                                      type: string
+                                    description:
+                                      type: string
+                                    value:
+                                      type: mixed
+                                      options:
+                                        - type: 'null'
+                                        - type: boolean
+                                        - type: string
+                                        - type: object
+                                          extensible: true
+                                        - type: array
+                                    extenralValue:
+                                      type: string
+                                - type: object
+                                  fields:
+                                    $ref:
+                                      type: string
+                          encoding:
+                            type: object
+                            extensible: true
+                            extensionFields:
+                              type: object
+                              fields:
+                                contentType:
+                                  type: string
+                                headers:
+                                  type: object
+                                  extensible: true
+                                  extensionFields:
+                                    type: mixed
+                                    options:
+                                      - type: object
+                                        fields:
+                                          description:
+                                            type: string
+                                          required:
+                                            type: boolean
+                                          deprecated:
+                                            type: boolean
+                                          allowEmptyValue:
+                                            type: boolean
+                                          # @todo check other fields such as 'schema', etc. in Open API 3 spec.
+                                      - type: object
+                                        fields:
+                                          $ref:
+                                            type: string
+                                style:
+                                  type: string
+                                explode:
+                                  type: boolean
+                                allowReserved:
+                                  type: string
+                    required:
+                      type: boolean
+                - type: object
+                  fields:
+                    $ref:
+                      type: string
 
             responses:
               type: object
               extensible: true
-              fields: {}
+              fields:
+                default:
+                  type: mixed
+                  options:
+                    - type: object
+#                      fields:
+#
+                    - type: object
+                      fields:
+                        $ref:
+                          type: string
               extensionFields:
                 type: object
                 fields:
@@ -171,18 +247,6 @@ fields:
                   type: array
                   items:
                     type: string
-
-
-
-
-
-
-
-
-
-
-
-
 
   tags:
     type: array
@@ -200,4 +264,3 @@ fields:
               type: string
             url:
               type: string
-

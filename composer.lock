@@ -8,17 +8,20 @@
     "packages": [
         {
             "name": "daniel-duarte/php-openspec",
-            "version": "1.0.2",
+            "version": "1.0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/daniel-duarte/php-openspec.git",
-                "reference": "6ae4cf3d744cc7762c58d9dc99bffee660377147"
+                "reference": "0bb421317db8f610154fd1cddd901315eb5d90ae"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/daniel-duarte/php-openspec/zipball/6ae4cf3d744cc7762c58d9dc99bffee660377147",
-                "reference": "6ae4cf3d744cc7762c58d9dc99bffee660377147",
+                "url": "https://api.github.com/repos/daniel-duarte/php-openspec/zipball/0bb421317db8f610154fd1cddd901315eb5d90ae",
+                "reference": "0bb421317db8f610154fd1cddd901315eb5d90ae",
                 "shasum": ""
+            },
+            "require": {
+                "php": "^7.0"
             },
             "require-dev": {
                 "phpunit/phpunit": "^7"
@@ -32,13 +35,13 @@
             "license": [
                 "MIT"
             ],
-            "description": "OpenSpec PHP",
+            "description": "OpenSpec for PHP",
             "homepage": "https://github.com/daniel-duarte/php-openspec/blob/master/README.md",
             "support": {
-                "source": "https://github.com/daniel-duarte/php-openspec/tree/master",
+                "source": "https://github.com/daniel-duarte/php-openspec/tree/1.0.6",
                 "issues": "https://github.com/daniel-duarte/php-openspec/issues"
             },
-            "time": "2018-03-27T04:31:41+00:00"
+            "time": "2018-03-30T18:30:03+00:00"
         },
         {
             "name": "symfony/yaml",

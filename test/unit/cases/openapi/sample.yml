@@ -35,39 +35,39 @@ tags:
       url: 'http://swagger.io'
 
 paths:
-  /pet:
-    post:
-      tags:
-        - pet
-      summary: Add a new pet to the store
-      operationId: addPet
-      responses:
-        '405':
-          description: Invalid input
-      security:
-        - petstore_auth:
-            - 'write:pets'
-            - 'read:pets'
-      requestBody:
-        $ref: '#/components/requestBodies/Pet'
-    put:
-      tags:
-        - pet
-      summary: Update an existing pet
-      operationId: updatePet
-      responses:
-        '400':
-          description: Invalid ID supplied
-        '404':
-          description: Pet not found
-        '405':
-          description: Validation exception
-      security:
-        - petstore_auth:
-            - 'write:pets'
-            - 'read:pets'
-      requestBody:
-        $ref: '#/components/requestBodies/Pet'
+#  /pet:
+#    post:
+#      tags:
+#        - pet
+#      summary: Add a new pet to the store
+#      operationId: addPet
+#      responses:
+#        '405':
+#          description: Invalid input
+#      security:
+#        - petstore_auth:
+#            - 'write:pets'
+#            - 'read:pets'
+#      requestBody:
+#        $ref: '#/components/requestBodies/Pet'
+#    put:
+#      tags:
+#        - pet
+#      summary: Update an existing pet
+#      operationId: updatePet
+#      responses:
+#        '400':
+#          description: Invalid ID supplied
+#        '404':
+#          description: Pet not found
+#        '405':
+#          description: Validation exception
+#      security:
+#        - petstore_auth:
+#            - 'write:pets'
+#            - 'read:pets'
+#      requestBody:
+#        $ref: '#/components/requestBodies/Pet'
   /pet/findByStatus:
     get:
       tags:
@@ -75,21 +75,21 @@ paths:
       summary: Finds Pets by status
       description: Multiple status values can be provided with comma separated strings
       operationId: findPetsByStatus
-#      parameters:
-#        - name: status
-#          in: query
-#          description: Status values that need to be considered for filter
-#          required: true
-#          explode: true
-#          schema:
-#            type: array
-#            items:
-#              type: string
-#              enum:
-#                - available
-#                - pending
-#                - sold
-#              default: available
+      parameters:
+        - name: status
+          in: query
+          description: Status values that need to be considered for filter
+          required: true
+          #explode: true
+          #schema:
+          #  type: array
+          #  items:
+          #    type: string
+          #    enum:
+          #      - available
+          #      - pending
+          #      - sold
+          #    default: available
       responses:
         '200':
           description: successful operation
@@ -104,34 +104,34 @@ paths:
 #                type: array
 #                items:
 #                  $ref: '#/components/schemas/Pet'
-#        '400':
-#          description: Invalid status value
-#      security:
-#        - petstore_auth:
-#            - 'write:pets'
-#            - 'read:pets'
-#  /pet/findByTags:
-#    get:
-#      tags:
-#        - pet
-#      summary: Finds Pets by tags
-#      description: >-
-#        Muliple tags can be provided with comma separated strings. Use\ \ tag1,
-#        tag2, tag3 for testing.
-#      operationId: findPetsByTags
-#      parameters:
-#        - name: tags
-#          in: query
-#          description: Tags to filter by
-#          required: true
+        '400':
+          description: Invalid status value
+      security:
+        - petstore_auth:
+            - 'write:pets'
+            - 'read:pets'
+  /pet/findByTags:
+    get:
+      tags:
+        - pet
+      summary: Finds Pets by tags
+      description: >-
+        Muliple tags can be provided with comma separated strings. Use\ \ tag1,
+        tag2, tag3 for testing.
+      operationId: findPetsByTags
+      parameters:
+        - name: tags
+          in: query
+          description: Tags to filter by
+          required: true
 #          explode: true
 #          schema:
 #            type: array
 #            items:
 #              type: string
-#      responses:
-#        '200':
-#          description: successful operation
+      responses:
+        '200':
+          description: successful operation
 #          content:
 #            application/json:
 #              schema:
@@ -143,31 +143,31 @@ paths:
 #                type: array
 #                items:
 #                  $ref: '#/components/schemas/Pet'
-#        '400':
-#          description: Invalid tag value
-#      security:
-#        - petstore_auth:
-#            - 'write:pets'
-#            - 'read:pets'
+        '400':
+          description: Invalid tag value
+      security:
+        - petstore_auth:
+            - 'write:pets'
+            - 'read:pets'
 #      deprecated: true
-#  '/pet/{petId}':
-#    get:
-#      tags:
-#        - pet
-#      summary: Find pet by ID
-#      description: Returns a single pet
-#      operationId: getPetById
-#      parameters:
-#        - name: petId
-#          in: path
-#          description: ID of pet to return
-#          required: true
+  '/pet/{petId}':
+    get:
+      tags:
+        - pet
+      summary: Find pet by ID
+      description: Returns a single pet
+      operationId: getPetById
+      parameters:
+        - name: petId
+          in: path
+          description: ID of pet to return
+          required: true
 #          schema:
 #            type: integer
 #            format: int64
-#      responses:
-#        '200':
-#          description: successful operation
+      responses:
+        '200':
+          description: successful operation
 #          content:
 #            application/json:
 #              schema:
@@ -175,12 +175,12 @@ paths:
 #            application/xml:
 #              schema:
 #                $ref: '#/components/schemas/Pet'
-#        '400':
-#          description: Invalid ID supplied
-#        '404':
-#          description: Pet not found
-#      security:
-#        - api_key: []
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Pet not found
+      security:
+        - api_key: []
 #    post:
 #      tags:
 #        - pet
