@@ -1,10 +1,53 @@
-type: object
-fields:
+openspec: 1.0.7
+name: OpenApi
+version: 3.0.1
 
-  openapi:
-    type: string
+# @todo specify required fields
 
-  info:
+spec:
+  type: object
+  fields:
+
+    openapi:
+      type: string
+
+    info:
+      type: ref
+      spec: ApiInfo
+
+    servers:
+      type: array
+      items:
+        type: ref
+        spec: Server
+
+    paths:
+      type: ref
+      spec: Paths
+
+    components:
+      type: ref
+      spec: Components
+
+    security:
+      type: array
+      items:
+        type: ref
+        spec: SecurityRequirement
+
+    tags:
+      type: array
+      items:
+        type: ref
+        spec: Tag
+
+    externalDocs:
+      type: ref
+      spec: ExternalDocumentation
+
+definitions:
+
+  ApiInfo:
     type: object
     fields:
       title:
@@ -14,253 +57,559 @@ fields:
       termsOfService:
         type: string
       contact:
-        type: object
-        fields:
-          name:
-            type: string
-          url:
-            type: string
-          email:
-            type: string
+        type: ref
+        spec: Contact
       license:
-        type: object
-        fields:
-          name:
-            type: string
-          url:
-            type: string
+        type: ref
+        spec: License
       version:
         type: string
 
-  servers:
-    type: array
-    items:
-      type: object
-      fields:
-        url:
-          type: string
-        description:
-          type: string
-        variables:
-          type: object
-          extensible: true
-          fields: {}
-          extensionFields:
-            type: object
-            fields:
-              enum:
-                type: array
-                items:
-                  type: string
-              default:
-                type: string
-              description:
-                type: string
+  Contact:
+    type: object
+    fields:
+      name:
+        type: string
+      url:
+        type: string
+      email:
+        type: string
 
-  paths:
+  License:
+    type: object
+    fields:
+      name:
+        type: string
+      url:
+        type: string
+
+  Server:
+    type: object
+    fields:
+      url:
+        type: string
+      description:
+        type: string
+      variables:
+        type: object
+        extensible: true
+        extensionFields:
+          type: ref
+          spec: ServerVariable
+
+  ServerVariable:
+    type: object
+    fields:
+      enum:
+        type: array
+        items:
+          type: string
+      default:
+        type: string
+      description:
+        type: string
+
+  Paths:
     type: object
     extensible: true
-    fields: {}
     extensionFields:
-      type: object
-      #extensible: true # @todo remove this extensible when the spec is complete
-      fields:
-        $ref:
-          type: string
-        summary:
-          type: string
-        description:
-          type: string
-        get:
-          type: object
-          fields:
-            tags:
-              type: array
-              items:
-                type: string
-            summary:
-              type: string
-            description:
-              type: string
-            externalDocs:
-              type: object
-              fields:
-                description:
-                  type: string
-                url:
-                  type: string
-            operationId:
-              type: string
-            parameters:
-              type: array
-              items:
-                type: mixed
-                options:
-                  - type: object
-                    fields:
-                      name:
-                        type: string
-                      in:
-                        type: string
-                      description:
-                        type: string
-                      required:
-                        type: boolean
-                      deprecated:
-                        type: boolean
-                      allowEmptyValue:
-                        type: boolean
-                  - type: object
-                    fields:
-                      $ref:
-                        type: string
-            requestBody:
-              type: mixed
-              options:
-                - type: object
-                  fields:
-                    description:
-                      type: string
-                    content:
-                      type: object
-                      extensible: true
-                      fields: {}
-                      extensionFields:
-                        type: object
-                        fields:
-                          schema:
-                            type: mixed
-                            options:
-                              - type: object
-                                fields:
-                                  type:
-                                    type: string
-                                    # @todo complete schema fields according to https://github.com/OAI/OpenAPI-Specification/blob/3.0.1/versions/3.0.1.md#schemaObject
-                              - type: object
-                                fields:
-                                  $ref:
-                                    type: string
-                          example:
-                            type: mixed
-                            options:
-                              - type: 'null'
-                              - type: boolean
-                              - type: string
-                              - type: object
-                                extensible: true
-                              - type: array
-                          examples:
-                            type: object
-                            extensible: true
-                            extensionFields:
-                              type: mixed
-                              options:
-                                - type: object
-                                  fields:
-                                    summary:
-                                      type: string
-                                    description:
-                                      type: string
-                                    value:
-                                      type: mixed
-                                      options:
-                                        - type: 'null'
-                                        - type: boolean
-                                        - type: string
-                                        - type: object
-                                          extensible: true
-                                        - type: array
-                                    extenralValue:
-                                      type: string
-                                - type: object
-                                  fields:
-                                    $ref:
-                                      type: string
-                          encoding:
-                            type: object
-                            extensible: true
-                            extensionFields:
-                              type: object
-                              fields:
-                                contentType:
-                                  type: string
-                                headers:
-                                  type: object
-                                  extensible: true
-                                  extensionFields:
-                                    type: mixed
-                                    options:
-                                      - type: object
-                                        fields:
-                                          description:
-                                            type: string
-                                          required:
-                                            type: boolean
-                                          deprecated:
-                                            type: boolean
-                                          allowEmptyValue:
-                                            type: boolean
-                                          # @todo check other fields such as 'schema', etc. in Open API 3 spec.
-                                      - type: object
-                                        fields:
-                                          $ref:
-                                            type: string
-                                style:
-                                  type: string
-                                explode:
-                                  type: boolean
-                                allowReserved:
-                                  type: string
-                    required:
-                      type: boolean
-                - type: object
-                  fields:
-                    $ref:
-                      type: string
+      type: ref
+      spec: PathItem
 
-            responses:
-              type: object
-              extensible: true
-              fields:
-                default:
-                  type: mixed
-                  options:
-                    - type: object
-#                      fields:
-#
-                    - type: object
-                      fields:
-                        $ref:
-                          type: string
-              extensionFields:
-                type: object
-                fields:
-                  description:
-                    type: string
-            security:
-              type: array
-              items:
-                type: object
-                extensible: true
-                fields: {}
-                extensionFields:
-                  type: array
-                  items:
-                    type: string
+  PathItem:
+    type: object
+    fields:
+      $ref:
+        type: string
+      summary:
+        type: string
+      description:
+        type: string
+      get:
+        type: ref
+        spec: Operation
+      put:
+        type: ref
+        spec: Operation
+      post:
+        type: ref
+        spec: Operation
+      delete:
+        type: ref
+        spec: Operation
+      options:
+        type: ref
+        spec: Operation
+      head:
+        type: ref
+        spec: Operation
+      patch:
+        type: ref
+        spec: Operation
+      trace:
+        type: ref
+        spec: Operation
+      servers:
+        type: array
+        items:
+          type: ref
+          spec: Server
+      parameters:
+        type: array
+        items:
+          type: mixed
+          options:
+            - type: ref
+              spec: Parameter
+            - type: ref
+              spec: Reference
 
-  tags:
-    type: array
-    items:
-      type: object
-      fields:
-        name:
+  Operation:
+    type: object
+    fields:
+      tags:
+        type: array
+        items:
           type: string
-        description:
+      summary:
+        type: string
+      description:
+        type: string
+      externalDocs:
+        type: ref
+        spec: ExternalDocumentation
+      operationId:
+        type: string
+      parameters:
+        type: array
+        items:
+          type: mixed
+          options:
+            - type: ref
+              spec: Parameter
+            - type: ref
+              spec: Reference
+      requestBody:
+        type: mixed
+        options:
+          - type: ref
+            spec: RequestBody
+          - type: ref
+            spec: Reference
+      responses:
+        type: ref
+        spec: Responses
+      callbacks:
+        type: object
+        extensible: true
+        extensionFields:
+          type: mixed
+          options:
+            - type: ref
+              spec: Callback
+            - type: ref
+              spec: Reference
+      deprecated:
+        type: boolean
+      security:
+        type: array
+        items:
+          type: ref
+          spec: SecurityRequirement
+      servers:
+        type: array
+        items:
+          type: ref
+          spec: Server
+
+  Parameter:
+    type: object
+    fields:
+      name:
+        type: string
+      in:
+        type: string
+      description:
+        type: string
+      required:
+        type: boolean
+      deprecated:
+        type: boolean
+      allowEmptyValue:
+        type: boolean
+
+  Reference:
+    type: object
+    fields:
+      $ref:
+        type: string
+
+  ExternalDocumentation:
+    type: object
+    fields:
+      description:
+        type: string
+      url:
+        type: string
+
+  Callback:
+    type: object
+    extensible: true
+    extensionFields:
+      type: ref
+      spec: PathItem
+
+  RequestBody:
+    type: object
+    fields:
+      description:
+        type: string
+      content:
+        type: object
+        extensible: true
+        extensionFields:
+          type: ref
+          spec: MediaType
+      required:
+        type: boolean
+
+  MediaType:
+    type: object
+    fields:
+      schema:
+        type: mixed
+        options:
+          - type: ref
+            spec: Schema
+          - type: ref
+            spec: Reference
+      example:
+        type: ref
+        spec: Any
+      examples:
+        type: object
+        extensible: true
+        extensionFields:
+          type: mixed
+          options:
+            - type: ref
+              spec: Example
+            - type: ref
+              spec: Reference
+      encoding:
+        type: object
+        extensible: true
+        extensionFields:
+          type: ref
+          spec: Encoding
+
+  Schema:
+    type: object
+    fields:
+      title:
+        type: string
+      # @todo complete schema fields according to https://github.com/OAI/OpenAPI-Specification/blob/3.0.1/versions/3.0.1.md#schemaObject
+
+  Any:
+    type: mixed
+    options:
+      - type: 'null'
+      - type: boolean
+      - type: string
+      - type: object
+        extensible: true
+      - type: array
+
+  Example:
+    type: object
+    fields:
+      summary:
+        type: string
+      description:
+        type: string
+      value:
+        type: ref
+        spec: Any
+      extenralValue:
+        type: string
+
+  Encoding:
+    type: object
+    fields:
+      contentType:
+        type: string
+      headers:
+        type: object
+        extensible: true
+        extensionFields:
+          type: mixed
+          options:
+            - type: ref
+              spec: Header
+            - type: ref
+              spec: Reference
+      style:
+        type: string
+      explode:
+        type: boolean
+      allowReserved:
+        type: boolean
+
+  Header:
+    type: object
+    fields:
+      description:
+        type: string
+      required:
+        type: boolean
+      deprecated:
+        type: boolean
+      allowEmptyValue:
+        type: boolean
+      # @todo check other fields such as 'schema', etc. in Open API 3 spec.
+
+  Responses:
+    type: object
+    extensible: true
+    fields:
+      default:
+        type: mixed
+        options:
+          - type: ref
+            spec: Response
+          - type: ref
+            spec: Reference
+    extensionFields:
+      type: mixed
+      options:
+        - type: ref
+          spec: Response
+        - type: ref
+          spec: Reference
+
+  Response:
+    type: object
+    fields:
+      description:
+        type: string
+      headers:
+        type: object
+        extensible: true
+        extensionFields:
+          type: mixed
+          options:
+            - type: ref
+              spec: Header
+            - type: ref
+              spec: Reference
+      content:
+        type: object
+        extensible: true
+        extensionFields:
+          type: ref
+          spec: MediaType
+      links:
+        type: object
+        extensible: true
+        extensionFields:
+          type: mixed
+          options:
+            - type: ref
+              spec: Link
+            - type: ref
+              spec: Reference
+
+  Link:
+    type: object
+    fields:
+      operationRef:
+        type: string
+      operationId:
+        type: string
+      parameters:
+        type: object
+        extensible: true
+        extensionFields:
+          type: mixed
+          options:
+            - type: ref
+              spec: Any
+            - type: string # @todo check {expression} for this option. see if this option should be before Any.
+      requestBody:
+        type: mixed
+        options:
+          - type: ref
+            spec: Any
+          - type: string # @todo check {expression} for this option. see if this option should be before Any.
+      description:
+        type: string
+      server:
+        type: ref
+        spec: Server
+
+  Tag:
+    type: object
+    fields:
+      name:
+        type: string
+      description:
+        type: string
+      externalDocs:
+        type: ref
+        spec: ExternalDocumentation
+
+  Components:
+    type: object
+    fields:
+      schemas:
+        type: object
+        extensible: true
+        extensionFields:
+          type: mixed
+          options:
+            - type: ref
+              spec: Schema
+            - type: ref
+              spec: Reference
+      responses:
+        type: object
+        extensible: true
+        extensionFields:
+          type: mixed
+          options:
+            - type: ref
+              spec: Response
+            - type: ref
+              spec: Reference
+      parameters:
+        type: object
+        extensible: true
+        extensionFields:
+          type: mixed
+          options:
+            - type: ref
+              spec: Parameter
+            - type: ref
+              spec: Reference
+      examples:
+        type: object
+        extensible: true
+        extensionFields:
+          type: mixed
+          options:
+            - type: ref
+              spec: Example
+            - type: ref
+              spec: Reference
+      requestBodies:
+        type: object
+        extensible: true
+        extensionFields:
+          type: mixed
+          options:
+            - type: ref
+              spec: RequestBody
+            - type: ref
+              spec: Reference
+      headers:
+        type: object
+        extensible: true
+        extensionFields:
+          type: mixed
+          options:
+            - type: ref
+              spec: Header
+            - type: ref
+              spec: Reference
+      securitySchemes:
+        type: object
+        extensible: true
+        extensionFields:
+          type: mixed
+          options:
+            - type: ref
+              spec: SecurityScheme
+            - type: ref
+              spec: Reference
+      links:
+        type: object
+        extensible: true
+        extensionFields:
+          type: mixed
+          options:
+            - type: ref
+              spec: Link
+            - type: ref
+              spec: Reference
+      callbacks:
+        type: object
+        extensible: true
+        extensionFields:
+          type: mixed
+          options:
+            - type: ref
+              spec: Callback
+            - type: ref
+              spec: Reference
+
+  SecurityScheme:
+    type: object
+    fields:
+      type:
+        type: string
+      description:
+        type: string
+      name:
+        type: string
+      in:
+        type: string
+      scheme:
+        type: string
+      bearerFormat:
+        type: string
+      flows:
+        type: ref
+        spec: OAuthFlows
+      openIdConnectUrl:
+        type: string
+
+  OAuthFlows:
+    type: object
+    fields:
+      implicit:
+        type: ref
+        spec: OAuthFlow
+      password:
+        type: ref
+        spec: OAuthFlow
+      clientCredentials:
+        type: ref
+        spec: OAuthFlow
+      authorizationCode:
+        type: ref
+        spec: OAuthFlow
+
+  OAuthFlow:
+    type: object
+    fields:
+      authorizationUrl:
+        type: string
+      tokenUrl:
+        type: string
+      refreshUrl:
+        type: string
+      scopes:
+        type: object
+        extensible: true
+        extensionFields:
           type: string
-        externalDocs:
-          type: object
-          fields:
-            description:
-              type: string
-            url:
-              type: string
+
+# @todo double check schema vs scheme in all the spec.
+
+  SecurityRequirement:
+    type: object
+    extensible: true
+    extensionFields:
+      type: array
+      items:
+        type: string
