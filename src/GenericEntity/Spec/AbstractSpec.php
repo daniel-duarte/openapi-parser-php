@@ -186,7 +186,7 @@ abstract class AbstractSpec implements Spec
 
     protected function _isNativeSpec($fieldType)
     {
-        return in_array($fieldType, AbstractNativeType::getNativeTypeNames());
+        return in_array($fieldType, AbstractNativeType::getNativeTypeNames(), true);
     }
 
     protected function __errInvalidFieldType($fieldType)

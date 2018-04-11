@@ -41,12 +41,6 @@ final class SpecTest extends TestCase
         }
     }
 
-// @todo deactivated these tests for now. check if this should be deleted
-//    public function testBasicSpecs()
-//    {
-//        $this->runTestSpecs(__DIR__ . '/cases/specs/');
-//    }
-
     public function testOpenApiSpecs()
     {
         $this->runTestSpecs(__DIR__ . '/cases/openapi/');
