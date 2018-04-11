@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "daniel-duarte/php-openspec",
-            "version": "1.0.8",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/daniel-duarte/php-openspec.git",
-                "reference": "9c44ccb1eaacd577c34605dbf2b51474a6df4461"
+                "reference": "46614cb301416763a4bbec0f7809fe3f66616c65"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/daniel-duarte/php-openspec/zipball/9c44ccb1eaacd577c34605dbf2b51474a6df4461",
-                "reference": "9c44ccb1eaacd577c34605dbf2b51474a6df4461",
+                "url": "https://api.github.com/repos/daniel-duarte/php-openspec/zipball/46614cb301416763a4bbec0f7809fe3f66616c65",
+                "reference": "46614cb301416763a4bbec0f7809fe3f66616c65",
                 "shasum": ""
             },
             "require": {
@@ -38,10 +38,10 @@
             "description": "OpenSpec for PHP",
             "homepage": "https://github.com/daniel-duarte/php-openspec/blob/master/README.md",
             "support": {
-                "source": "https://github.com/daniel-duarte/php-openspec/tree/1.0.8",
+                "source": "https://github.com/daniel-duarte/php-openspec/tree/1.1.0",
                 "issues": "https://github.com/daniel-duarte/php-openspec/issues"
             },
-            "time": "2018-04-11T01:33:19+00:00"
+            "time": "2018-04-11T11:41:55+00:00"
         },
         {
             "name": "symfony/yaml",
@@ -1067,16 +1067,16 @@
         },
         {
             "name": "phpunit/phpunit-mock-objects",
-            "version": "6.1.0",
+            "version": "6.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit-mock-objects.git",
-                "reference": "3f5ca97eee66a07951d018f6726017629c85c86d"
+                "reference": "70c740bde8fd9ea9ea295be1cd875dd7b267e157"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/3f5ca97eee66a07951d018f6726017629c85c86d",
-                "reference": "3f5ca97eee66a07951d018f6726017629c85c86d",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/70c740bde8fd9ea9ea295be1cd875dd7b267e157",
+                "reference": "70c740bde8fd9ea9ea295be1cd875dd7b267e157",
                 "shasum": ""
             },
             "require": {
@@ -1119,7 +1119,7 @@
                 "mock",
                 "xunit"
             ],
-            "time": "2018-04-06T08:14:40+00:00"
+            "time": "2018-04-11T04:50:36+00:00"
         },
         {
             "name": "psr/container",

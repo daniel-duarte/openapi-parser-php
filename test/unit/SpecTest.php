@@ -2,7 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Yaml\Yaml;
-use OpenSpec\Spec\Spec;
+use OpenSpec\Spec\OpenSpec;
 
 
 final class SpecTest extends TestCase
@@ -21,7 +21,7 @@ final class SpecTest extends TestCase
 
             try {
 
-                $userSpec = new Spec($userSpecData);
+                $userSpec = new OpenSpec($userSpecData);
 
                 $specErrors = [];
             } catch (\OpenSpec\ParseSpecException $ex) {
