@@ -1,48 +1,30 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Yaml\Yaml;
-use OpenSpec\Spec\OpenSpec;
+use OpenApi\SpecLoader;
 
 
 final class SpecTest extends TestCase
 {
     public function runTestSpecs($dirpath): void
     {
-        $specFilesExpr = $dirpath . '*.spec.yml';
-        $specFiles = glob($specFilesExpr);
+        $specLoader = new SpecLoader();
 
-        foreach ($specFiles as $specFilepath) {
+        $sampleFilepaths = glob($dirpath . '*.yml');
 
-            $specSampleFilepath = str_replace('.spec', '', $specFilepath);
+        foreach ($sampleFilepaths as $sampleFilepath) {
 
-            $userSpecData       = Yaml::parseFile($specFilepath);
-            $userSpecSampleData = Yaml::parseFile($specSampleFilepath);
+            $sampleApiErrors = $specLoader->loadApiSpecFromYamlFile($sampleFilepath);
 
-            try {
-
-                $userSpec = new OpenSpec($userSpecData);
-
-                $specErrors = [];
-            } catch (\OpenSpec\ParseSpecException $ex) {
-                $specErrors = $ex->getErrors();
-            }
-
-            $specErrors = array_column($specErrors, 1);
-            $this->assertTrue(count($specErrors) === 0, "User spec not valid in file '$specSampleFilepath':" . PHP_EOL .
-                '- ' . implode(PHP_EOL . '- ', $specErrors)
+            $sampleApiErrors = array_column($sampleApiErrors, 1);
+            $this->assertTrue(count($sampleApiErrors) === 0, "Api spec not valid in file '$sampleFilepath':" . PHP_EOL .
+                '- ' . implode(PHP_EOL . '- ', $sampleApiErrors)
             );
-
-            if (count($specErrors) === 0) {
-                $errors = $userSpec->validateGetErrors($userSpecSampleData);
-                $this->assertTrue(count($errors) === 0, "User data in file '$specSampleFilepath' does not follow the spec in file '$specFilepath'." . PHP_EOL .
-                    '- ' . implode(PHP_EOL . '- ', array_column($errors, 1)));
-            }
         }
     }
 
     public function testOpenApiSpecs()
     {
-        $this->runTestSpecs(__DIR__ . '/cases/openapi/');
+        $this->runTestSpecs(__DIR__ . '/cases/');
     }
 }
