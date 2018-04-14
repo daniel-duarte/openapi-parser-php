@@ -1,0 +1,684 @@
+openapi: 3.0.0
+info:
+  version: 'v1'
+  title: 'BiTRADE REST API'
+
+  description: |
+    Welcome to the BiTRADE REST API interactive documentation.
+
+    # **Authentication**
+
+    TODO describe authentication
+
+
+    # **Errors**
+    All errors returned by the API are accompanied by `JSON` object with the following fields:
+
+        {
+          "timestamp": 1520190049912,
+          "status": 403,
+          "error": "Forbidden",
+          "message": "No message available",
+          "path": "/rates/BTC-USDT/poloniex",
+          "traceId": "9f966f94-3da5-4385-9212-2f57f5847a09"
+        }
+
+    The following errors can be returned by the API:
+
+    <table>
+      <tr><th>HTTP Status</td><th>Error</th><th>Possible cause</th></tr>
+      <tr>
+        <td>400</td>
+        <td>Bad Request</td>
+        <td>One or more parameters are of the wrong type, are outside of their valid range or are missing.</td>
+      </tr>
+      <tr>
+        <td>401</td>
+        <td>Not Authorized</td>
+        <td>The <code>X-API-Key</code> header is either missing or it has an invalid or unknown value.</td>
+      </tr>
+      <tr>
+        <td>403</td>
+        <td>Forbidden</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>404</td>
+        <td>Not Found</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>405</td>
+        <td>Method Not Allowed</td>
+        <td>You are trying to use something other than GET or POST.</td>
+      </tr>
+      <tr>
+        <td>429</td>
+        <td>Too Many Requests</td>
+        <td>One or more parameters are of the wrong type, are outside of their valid range or are missing.</td>
+      </tr>
+      <tr>
+        <td>500</td>
+        <td>Internal Server Error</td>
+        <td>This is entirely our fault.</td>
+      </tr>
+    </table>
+
+    Additionally there are errors returned by the infrastructure of our cloud provider. They do **not** have a JSON
+    structure with details about the error. The following table lists these possible errors.
+
+    <table>
+      <tr><th>HTTP Status</td><th>Error</th><th>Possible cause</th></tr>
+      <tr>
+        <td>463</td>
+        <td>Too Many IPs</td>
+        <td>We received an X-Forwarded-For request header with more than 30 IP addresses.</td>
+      </tr>
+      <tr>
+        <td>502</td>
+        <td>Bad Gateway</td>
+        <td>This indicates a temporary condition where our application is experiencing problems.</td>
+      </tr>
+      <tr>
+        <td>503</td>
+        <td>Service Unavailable</td>
+        <td>This indicates a temporary condition where our application is experiencing problems.</td>
+      </tr>
+      <tr>
+        <td>504</td>
+        <td>Gateway Timeout</td>
+        <td>This indicates a temporary condition where our application is experiencing problems.</td>
+      </tr>
+    </table>
+
+    # **Trace ID**
+    When making calls to the API you can add a `Trace-ID` HTTP request header with a
+    [UUID](https://en.wikipedia.org/wiki/Universally_unique_identifier) value. When in need of support providing the
+    submitted UUID will help in diagnosing problems.
+
+    All responses will contain a `Trace-ID` response header. When a *trace-id* was submitted in the request the value
+    will be echoed in the response. If no value was submitted the response header will contain a unique (Type 4) UUID
+    value. This value can be used for support as well.
+
+    Note: this value is also part of the JSON object returned in case of errors.
+
+
+    # **Paging results**
+    Returning large lists of items will degrade performance and is generally inefficient. The listing mechanism
+    supports paging using the following optional parameters:
+
+    <table>
+      <tr><th>Parameter</td><th>Required</th><th>Value</th></tr>
+      <tr>
+        <td>limit</td>
+        <td>no</td>
+        <td>default: 10, max: 100</td>
+      </tr>
+      <tr>
+        <td>exclStartKey</td>
+        <td>no</td>
+        <td>the value of the "lastEvaluatedKey" attribute from the preceding page</td>
+      </tr>
+    </table>
+
+tags:
+  - name: "Exchanges"
+
+servers:
+  - url: https://api-dev.bitrade.nl
+    description: "Development server"
+
+security:
+  - ApiKeyAuth: []
+
+paths:
+
+  /data/currencyPairs:
+    get:
+      summary: "Returns the list of supported currencyPairs"
+      description: |
+        This function will return the list of supported currency pairs. These pairs can be used as value for the
+        `currencyPair` parameter in other functions. Currency pairs are case-sensitive.
+      operationId: getCurrencyPairs
+      tags: [ "Exchanges" ]
+      responses:
+        '200':
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CurrencyPair'
+              example:
+                - "BTC-USD"
+                - "BTC-USDT"
+                - "BTC-ETH"
+
+  /data/exchanges:
+    get:
+      summary: "Returns the list of uids for supported exchanges"
+      description: |
+        This function will return the list of `uids` of supported exchanges. This `uid` can be used as a value for the
+        `exchangeUid` parameter in other functions. Exchange uids are case-sensitive.
+      operationId: getExchangeUids
+      tags: [ "Exchanges" ]
+      responses:
+        '200':
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ExchangeUid'
+              example:
+                - "binance"
+                - "bittrex"
+                - "cexio"
+                - "kraken"
+                - "liqui"
+                - "poloniex"
+
+  /data/exchanges/{exchangeUid}:
+    get:
+      summary: "Gets the exchange information"
+      description: ""
+      operationId: getExchange
+      tags: [ "Exchanges" ]
+      parameters:
+      - $ref: '#/components/parameters/exchangeUid'
+      responses:
+        '200':
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Exchange'
+
+  /data/trades/{currencyPair}/{exchangeUid}:
+    get:
+      summary: "Gets a list of Trades"
+      description: |
+        This function will return a (paged) list of Trades for the given currencyPair at the specified exchange.
+      operationId: getTrades
+      tags: [ "Trades" ]
+      parameters:
+      - $ref: '#/components/parameters/exchangeUid'
+      - $ref: '#/components/parameters/currencyPair'
+      - $ref: '#/components/parameters/orderTypeQs'
+      - $ref: '#/components/parameters/timestampFrom'
+      - $ref: '#/components/parameters/timestampTo'
+      - $ref: '#/components/parameters/limit'
+      - $ref: '#/components/parameters/exclStartKey'
+      - $ref: '#/components/parameters/direction'
+      responses:
+        '200':
+          description: "OK"
+          content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/TradesPage'
+
+components:
+
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: "X-API-Key"
+
+  parameters:
+
+    exchangeUid:
+      in: path
+      name: exchangeUid
+      description: |
+        The exchange uid. See operation [getExchangeUids](#!/Exchanges/getExchangeUids) to get a list of supported
+        exchange uids.
+      required: true
+      schema:
+        type: string
+        pattern: '[a-z]+'
+      example:
+        "liqui"
+
+    currencyPair:
+      in: path
+      name: currencyPair
+      description: |
+        The (BiTRADE) currency pair. See operation [getCurrencyPairs](#!/Exchanges/getCurrencypairs) to get a list of supported
+        currency pairs.
+      required: true
+      schema:
+        type: string
+        pattern: '[A-Z0-9]{3,}-[A-Z0-9]{3,}'
+      example:
+        "BTC-USDT"
+
+    orderType:
+      in: path
+      name: orderType
+      description: ""
+      required: true
+      schema:
+        type: string
+        enum: [ "Buy", "Sell" ]
+      example: "Buy"
+
+
+    orderTypeQs:
+      in: query
+      name: orderType
+      description: ""
+      required: false
+      schema:
+        type: string
+        enum: [ "Buy", "Sell" ]
+      example: "Buy"
+
+    timestampFrom:
+      in: query
+      name: timestampFrom
+      description: ""
+      schema:
+        type: number
+        format: int32
+        minimum: 0
+        maximum: 1577836800
+      example:
+
+    timestampTo:
+      in: query
+      name: timestampTo
+      description: ""
+      schema:
+        $ref: '#/components/schemas/Timestamp'
+
+    exclStartKey:
+      in: query
+      name: exclStartKey
+      description: ""
+      required: false
+      schema:
+        type: string
+
+    limit:
+      in: query
+      name: limit
+      description: ""
+      schema:
+        type: number
+        format: int32
+        default: 10
+        maximum: 100
+
+    direction:
+      in: query
+      name: direction
+      description: |
+        Specifies the order of the returned items. All items are ordered `descending` (newest to oldest) by default. The
+        value `ascending` will invert that behaviour.
+      schema:
+        type: string
+        enum: [ "ascending", "descending" ]
+        default: "descending"
+
+  schemas:
+
+    Timestamp:
+      type: number
+      description: "The exchange-local timestamp (estimated)"
+      format: int32
+      minimum: 0
+      maximum: 1577836800
+
+    AppTimestamp:
+      type: number
+      description: "The BiTRADE timestamp"
+      format: int32
+      minimum: 0
+      maximum: 1577836800
+
+    ExchangeUid:
+      type: string
+      description: "The exchange unique id"
+      pattern: '[a-z]+'
+
+    Currency:
+      type: string
+      description: "The BiTrade currency"
+      pattern: '[A-Z0-9]{3,}'
+
+    CurrencyPair:
+      type: string
+      description: "The BiTrade currency pairs"
+      pattern: '[A-Z0-9]{3,}-[A-Z0-9]{3,}'
+
+    LocalCurrency:
+      type: string
+      description: "The exchange-local currency"
+      pattern: '[a-zA-Z0-9]{3,}'
+
+    LocalCurrencyPair:
+      type: string
+      description: "The exchange-local currency pairs"
+      pattern: '[a-zA-Z0-9-_:/]{3,}'
+
+    OrderType:
+      type: string
+      description: ""
+      enum: [ "Buy", "Sell" ]
+      example: "Buy"
+
+    Exchange:
+      type: object
+      readOnly: true
+      required: [ "exchangeUid", "currencies", "currencyPairs", "tradeFees", "transferFees" ]
+      properties:
+        exchangeUid:
+          $ref: '#/components/schemas/ExchangeUid'
+        currencies:
+          type: object
+          description: |
+            A map of BiTrade currency names as keys and corresponding exchange-local currency names as values.
+          additionalProperties:
+            $ref: '#/components/schemas/LocalCurrency'
+        currencyPairs:
+          type: object
+          description: |
+            A map of BiTrade currency-pair names as keys and corresponding exchange-local currency-pair names as values.
+#          additionalProperties:
+#            $ref: '#/components/schemas/LocalCurrencyPair'
+        tradeFees:
+          type: object
+          description: |
+            A map of BiTrade currency-pair names as keys and corresponding trade fees as values.
+#          additionalProperties:
+#            $ref: '#/components/schemas/TradeFee'
+        transferFees:
+          type: object
+          description: |
+            A map of BiTrade currency names as keys and corresponding transfer fees as values.
+#          additionalProperties:
+#            $ref: '#/components/schemas/TradeFee'
+      example:
+        exchangeUid: liqui
+        currencies:
+          "BCC": "BCC"
+          "BTC": "BTC"
+          "DASH": "DASH"
+          "ETC": "ETC"
+          "ETH": "ETH"
+          "LTC": "LTC"
+          "USDT": "USDT"
+          "WAVES": "WAVES"
+          "XMR": "XMR"
+          "XRP": "XRP"
+        currencyPairs:
+          "BCC-BCT": "BTC-BCC"
+          "BCC-USDT": "USDT-BCC"
+          "BTC-USDT": "USDT-BTC"
+          "DASH-BTC": "BTC-DASH"
+          "DASH-USDT": "USDT-DASH"
+          "DOGE-BTC": "BTC-DOGE"
+          "ETC-BTC": "BTC-ETC"
+          "ETC-USDT": "USDT-ETC"
+          "ETH-BTC": "BTC-ETH"
+          "ETH-USDT": "USDT-ETH"
+          "LTC-BTC": "BTC-LTC"
+          "LTC-USDT": "USDT-LTC"
+          "MLN-BTC": "BTC-MLN"
+          "WAVES-BTC": "BTC-WAVES"
+          "XMR-BTC": "BTC-XMR"
+          "XMR-USDT": "USDT-XMR"
+          "XRP-BTC": "BTC-XRP"
+          "XRP-USDT": "USDT-XRP"
+        tradeFees:
+          "BTC-USDT":
+            currencyPair: "BTC-USDT"
+            localCurrencyPair: "BTC-USDT"
+            volumeCurrency: "BTC"
+            fees:
+              - maker: 0.25
+                taker: 0.25
+                makerFactor: 0.0025
+                takerFactor: 0.0025
+                volFrom: 0
+                volTo: null
+          "BTC-ETH":
+            currencyPair: "BTC-ETH"
+            localCurrencyPair: "BTC-ETH"
+            volumeCurrency: "BTC"
+            fees:
+              - maker: 0.25
+                taker: 0.25
+                makerFactor: 0.0025
+                takerFactor: 0.0025
+                volFrom: 0
+                volTo: null
+        transferFees:
+          "BTC":
+            currency: "BTC"
+            localCurrency: "BTC"
+            feeCurrency: "BTC"
+            type: "Digital"
+            deposit:
+                feePct: 0.0
+                fee: 0
+                feeMin: 0
+                feeMax: null
+                min: null
+                max: null
+                dailyMax: null
+                monthlyMax: null
+            withdraw:
+                feePct: 0.0
+                fee: 0
+                feeMin: 0
+                feeMax: null
+                min: null
+                max: null
+                dailyMax: null
+                monthlyMax: null
+
+    TradeFee:
+      type: object
+      readOnly: true
+      required: [ "currencyPair", "localCurrencyPair", "volumeCurrency", "fees" ]
+      description: |
+        This structure defines the volume-based trade fees. Maker fees are applied to orders that are not immediately
+        matched. Maker orders create market liquidity and the fees are typically lower. Taker fees are applied to orders
+        that immediately match an existing counter order. As they remove liquidity from the market the taker fees are
+        typically higher.
+      properties:
+        currencyPair:
+          $ref: '#/components/schemas/CurrencyPair'
+        localCurrencyPair:
+          $ref: '#/components/schemas/LocalCurrencyPair'
+        volumeCurrency:
+          $ref: '#/components/schemas/Currency'
+        fees:
+          type: array
+          items:
+            $ref: '#/components/schemas/VolumeFee'
+
+    VolumeFee:
+      type: object
+      readOnly: true
+      required: [ "maker", "taker", "makerFactor", "takerFactor", "volFrom", "volTo" ]
+      description: |
+        This structure defines the volume-based trade fees. Maker fees are applied to orders that are not immediately
+        matched. Maker orders create market liquidity and the fees are typically lower. Taker fees are applied to orders
+        that immediately match an existing counter order. As they remove liquidity from the market the taker fees are
+        typically higher.
+
+        The volume-range that these fees apply to is typically the cumulative monthly trading volume of the account.
+        Some exchanges do not use volume-based fee discounts.
+      properties:
+        maker:
+          type: number
+          description: "The maker fee percentage"
+          format: double
+          minimum: 0
+        taker:
+          type: number
+          description: "The taker fee percentage"
+          format: double
+          minimum: 0
+        makerFactor:
+          type: number
+          description: "The maker fee factor (percentage / 100)"
+          format: double
+          minimum: 0
+        takerFactor:
+          type: number
+          description: "The taker fee factor (percentage / 100)"
+          format: double
+          minimum: 0
+        volFrom:
+          type: number
+          description: "The minimum monthly volume this fee applies to"
+          format: int32
+          minimum: 0
+        volTo:
+          type: number
+          description: "The maximum monthly volume this fee applies to. May be `null`."
+          format: int32
+          nullable: true
+
+    TransferFee:
+      type: object
+      readOnly: true
+      required: [ "currency", "localCurrency", "feeCurrency", "type", "deposit", "withdraw" ]
+      description: |
+
+      properties:
+        currency:
+          $ref: '#/components/schemas/Currency'
+        localCurrency:
+          $ref: '#/components/schemas/LocalCurrency'
+        feeCurrency:
+          $ref: '#/components/schemas/Currency'
+        type:
+          $ref: '#/components/schemas/TransferType'
+        deposit:
+          $ref: '#/components/schemas/FeeValues'
+        withdraw:
+          $ref: '#/components/schemas/FeeValues'
+
+    TransferType:
+      type: string
+      description: ""
+      enum: [ "Digital", "SEPA", "CreditCard", "MasterCard", "VISA", "BankWire", "Express" ]
+
+    FeeValues:
+      type: object
+      readOnly: true
+      required: [ "feePct", "fee", "feeMin", "teeMax", "min", "max", "dailyMax", "monthlyMax" ]
+      description: |
+
+      properties:
+        feePct:
+          type: number
+          description: "The fee percentage. Typically mutually exclusive with `fee`."
+          format: double
+          minimum: 0
+        fee:
+          type: number
+          description: "A fixed fee. Typically mutually exclusive with `feePct`."
+          format: double
+          minimum: 0
+        feeMin:
+          type: number
+          description: "The minimum fee."
+          format: double
+          minimum: 0
+        feeMax:
+          type: number
+          description: "The minimum fee. Possibly `null`."
+          format: double
+          nullable: true
+        min:
+          type: number
+          description: "The minimum transfer amount."
+          format: double
+          minimum: 0
+        max:
+          type: number
+          description: "The maximum transfer amount. May be `null`."
+          format: double
+          nullable: true
+        dailyMax:
+          type: number
+          description: "The maximum daily transfer amount. May be `null`."
+          format: double
+          nullable: true
+        monthlyMax:
+          type: number
+          description: "The maximum monthly transfer amount. May be `null`."
+          format: double
+          nullable: true
+
+    ObjType:
+      type: string
+      description: ""
+      enum: [ "Rate", "Trade", "Order", "Candle", "CandleSet", "OrderSet", "Message" ]
+
+    FillType:
+      type: string
+      description: ""
+      enum: [ "Partial", "Full" ]
+
+    Trade:
+      type: object
+      readOnly: true
+      required: [ "objType", "exchangeUid", "currencyPair", "localCurrencyPair", "appTimestamp", "timestamp", "type", "fillType", "price", "amount", "id", "uid", "buyOrderUid", "sellOrderUid" ]
+      properties:
+        objType:
+          $ref: '#/components/schemas/ObjType'
+        exchangeUid:
+          $ref: '#/components/schemas/ExchangeUid'
+        currencyPair:
+          $ref: '#/components/schemas/CurrencyPair'
+        localCurrencyPair:
+          $ref: '#/components/schemas/LocalCurrencyPair'
+        appTimestamp:
+          $ref: '#/components/schemas/AppTimestamp'
+        timestamp:
+          $ref: '#/components/schemas/Timestamp'
+        type:
+          $ref: '#/components/schemas/OrderType'
+        fillType:
+          $ref: '#/components/schemas/FillType'
+        price:
+          type: number
+          description: "The price of the trade"
+          format: double
+        amount:
+          type: number
+          description: "The volume of the trade"
+          format: double
+        id:
+          type: string
+          description: "The id of the trade"
+        uid:
+          type: string
+          description: "The uid of the trade (within BiTrade)"
+        buyOrderUid:
+          type: string
+          description: "The buy order UID, if available"
+        sellOrderUid:
+          type: string
+          description: "The sell order UID, if available"
+
+    TradesPage:
+      type: object
+      readOnly: true
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Trade'
+        lastEvaluatedKey:
+          type: string

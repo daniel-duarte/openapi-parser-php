@@ -434,6 +434,8 @@ definitions:
           - type: boolean
           - type: ref
             spec: Schema
+          - type: ref
+            spec: Reference
       description:
         type: string
       format:
