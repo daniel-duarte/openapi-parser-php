@@ -1,0 +1,126 @@
+openapi: 3.0.0
+info:
+    title: mch-gw
+    version: 0.0.1
+    description: mch-gw swagger API description
+    contact:
+        name: Station Infini Web inc
+        email: christian@roy.name
+    license:
+        name: Trade Secret
+        url: 'https://en.wikipedia.org/wiki/Trade_secret'
+tags:
+    - name: swagger
+      description: Swagger spec
+      externalDocs:
+        description: More about swagger
+        url: 'http://swagger.io'
+    - name: user
+      description: User management
+components:
+    schemas:
+        id:
+            type: integer
+            format: int64
+        ROLE:
+            type: string
+            enum:
+                - none
+                - user
+                - admin
+        ROLES:
+            type: array
+            items:
+                $ref: '#/components/schemas/ROLE'
+        UserInfo:
+            type: object
+            properties:
+                id:
+                    $ref: '#/components/schemas/id'
+                email:
+                    type: string
+                    description: User email
+                roles:
+                    $ref: '#/components/schemas/ROLES'
+                username:
+                    type: string
+                    description: User unique ever-lasting name - It follow unix username rules
+        UserCreate:
+            type: object
+            properties:
+                username:
+                    type: string
+                    description: User unique ever-lasting name - It follow unix username rules
+                password:
+                    type: string
+                    description: User password
+                email:
+                    type: string
+                    description: User email
+                roles:
+                    $ref: '#/components/schemas/ROLES'
+    parameters:
+        id:
+            in: path
+            name: id
+            required: true
+            schema:
+                $ref: '#/components/schemas/id'
+            description: the id of the entity
+    securitySchemes:
+        JWT:
+            in: header
+            type: apiKey
+            name: Authorization
+paths:
+    /swagger:
+        get:
+            tags:
+                - swagger
+            summary: Display Swagger UI page
+            responses:
+                '200':
+                    description: OK - Swagger UI woriking as expected
+    /api/user:
+        get:
+            tags:
+                - user
+            security:
+                - JWT: []
+            operationId: user_get
+            summary: Get current user details
+            responses:
+                '200':
+                    description: OK - Logged-in user details found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/UserInfo'
+                '401':
+                    description: Unauthorized - User is not authenticated
+        post:
+            tags:
+                - user
+            security:
+                - JWT: []
+            summary: Create user
+            operationId: user_create
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                allOf:
+                                    $ref: '#/components/schemas/UserCreate/properties'
+            responses:
+                '201':
+                    description: Created - User successfully created (-NOTE- that immediate loggin after create IS NOT automatic at the API level)
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/UserInfo'
+                '409':
+                    description: Conflict - Already reserved identity informations (username or email)
+                '422':
+                    description: Unprocessable Entity - Form data was unprocessable (incomplete or invalid)

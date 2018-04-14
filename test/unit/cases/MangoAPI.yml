@@ -1,0 +1,559 @@
+openapi: 3.0.0
+# Added by API Auto Mocking Plugin
+servers:
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/rudysch/MangoAPI/1.0.0
+info:
+  description: This is the API for the Mango Application
+  version: "1.0.0"
+  title: Mango Inventory API
+  contact:
+    email: rudy.schoepfer@hotmail.fr
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+tags:
+  - name: category
+    description: Operations made on the category Entity
+  - name: users
+    description: Operations made on the users Entity
+  - name: get
+    description: Operations made on the gets Entity
+  - name: ingredients
+    description: Operations made in link wih ingredient entity
+  - name: meal
+    description: Operations made in link wih meal Entity
+  - name: recipe
+    description: Operations made in link wih recipe Entity
+paths:
+  /recipes:
+    get:
+      tags:
+        - recipe
+      summary: obtain recipes informations
+      operationId: obtainRecipes
+      description: |
+        You can obtain all the recipes from the database for the book page.
+      responses:
+        '200':
+          description: recipes found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RecipeItem'
+        '400':
+          description: Recipe not found
+  /recipes/{id}:
+    get:
+      tags:
+        - recipe
+      summary: obtain information from one recipe
+      operationId: obtainOneRecipe
+      description: |
+        By passing in the appropriate option, you can obtain the specific recipe than you want.
+      responses:
+        '200':
+          description: recipe found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RecipeIdItem'
+        '400':
+          description: Recipe not found
+      parameters:
+        - in: path
+          name: id
+          description: Pass the idRecipe to retrieve value.
+          required: true
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+  /meal:
+    get:
+      tags:
+        - meal
+      summary: obtain type of meal
+      operationId: obtainMeal
+      description: |
+        You obtain all the meal from the database for the form to generate custom week.
+      responses:
+        '200':
+          description: Meal found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MealItem'
+        '400':
+          description: Meals not found.
+  /season/{id}/ingredients:
+    get:
+      tags:
+        - ingredients
+      summary: obtain ingredients from a specific season.
+      operationId: obtainIngredientsBySeason
+      description: |
+        You obtain all the ingrdients by a specific season from the database (use to obtain specific recipe thanks to season filter)
+      responses:
+        '200':
+          description: Season found, here are the ingredients.
+        '400':
+          description: Season not found.
+      parameters:
+        - in: path
+          name: id
+          description: Pass the idSeason to retrieve value.
+          required: true
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+  /category:
+    get:
+      tags:
+        - category
+      summary: obtain categories
+      operationId: obtainCategory
+      description: |
+        You can obtain all the category from the database.
+      responses:
+        '200':
+          description: Category found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CategoryItem'
+        '400':
+          description: Category not found
+  /category/{id}:
+    get:
+      tags:
+        - category
+      summary: obtain category.
+      operationId: obtainCategory
+      description: |
+      responses:
+        '200':
+          description: Season found, here are the ingredients.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CategoryItem'
+        '400':
+          description: Category not found.
+      parameters:
+        - in: path
+          name: id
+          description: ID of pet to fetch
+          required: true
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+  /category/{id}/recipes:
+    get:
+      tags:
+        - category
+      summary: obtain category.
+      operationId: obtainCategoryRecipe
+      description: |
+
+      responses:
+        '200':
+          description: Category found, here are the Recipe.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CategoryRecipes'
+        '400':
+          description: Category not found.
+      parameters:
+        - in: path
+          name: id
+          description: Pass the IdCategory to retrieve value.
+          required: true
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+  /users:
+    get:
+      tags:
+        - users
+      summary: obtain all users
+      operationId: obtainUsers
+      description: |
+        you obtain all the users from the database.
+      responses:
+        '200':
+          description: All users found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserItem'
+        '400':
+          description: Users not found
+    post:
+      tags:
+        - users
+      summary: add a user in the database
+      operationId: addUser
+      description: Add a new user in the database
+      responses:
+        '201':
+          description: user created
+        '400':
+          description: 'invalid input, user not created invalid'
+        '409':
+          description: a user already exist, request cancel.
+  /users/{id}:
+    get:
+      tags:
+        - users
+      summary: obtain information from one user.
+      operationId: obtainUser
+      description: |
+
+      responses:
+        '200':
+          description: User found.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserItem'
+        '400':
+          description: User not found.
+      parameters:
+        - in: path
+          name: id
+          description: Pass the IdUser to retrieve value.
+          required: true
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+    delete:
+      tags:
+        - users
+      summary: deleteUser
+      operationId: deleteUser
+      description: |
+        Delete the user in the database
+      responses:
+        '201':
+          description: user deleted
+        '400':
+          description: 'invalid input, user not deleted'
+      parameters:
+        - in: path
+          name: id
+          description: Pass the IdUser to delete the user in the database
+          required: true
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+    put:
+      tags:
+        - users
+      summary: update totaly User.
+      operationId: updateTotalyUser
+      description: |
+        Put action, update all the information of a specific user
+      responses:
+        '200':
+          description: User update (ALL).
+        '400':
+          description: User not found.
+      parameters:
+        - in: path
+          name: IdUser
+          description: Pass the IdUser to retrieve value.
+          required: true
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+    patch:
+      tags:
+        - users
+      summary: update partially User.
+      operationId: updatePartiallyUser
+      description: |
+        Patch action, update partially the information of a specific user
+      responses:
+        '200':
+          description: User update (PARTIALLY).
+        '400':
+          description: User not found.
+      parameters:
+        - in: path
+          name: IdUser
+          description: Pass the IdUser to retrieve value.
+          required: true
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+  /users/{id}/week:
+    get:
+      tags:
+        - get
+      summary: obtain all the recipe from one user concerning one week
+      operationId: obtainWeekRecipe
+      description: |
+        you obtain a week for one specific user with all the recipe.
+      responses:
+        '200':
+          description: Week find
+        '400':
+          description: Week not found
+      parameters:
+        - in: path
+          name: id
+          description: Pass the IdUser to retrieve the week of this user.
+          required: true
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+    post:
+      tags:
+        - get
+      summary: add a new recipe in a week
+      operationId: addRecipeWeek
+      description: |
+        Add a new line for a specific week form a specific
+      responses:
+        '201':
+          description: new line added for a week
+        '400':
+          description: 'invalid input, new line not added'
+      parameters:
+        - in: path
+          name: id
+          description: Pass the IdUser to added a line for his week
+          required: true
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+    delete:
+      tags:
+        - get
+      summary: deleteWeekLine
+      operationId: deleteWeekLine
+      description: |
+        Delete the week for a specific user
+      responses:
+        '201':
+          description: Week deleted
+        '400':
+          description: 'invalid input, week already exist'
+        '401':
+          description: Week not found
+      parameters:
+        - in: path
+          name: id
+          description: Pass the IdUser to delete the week of the user in the database
+          required: true
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+components:
+  schemas:
+    CategoryItem:
+      required:
+        - id_category
+        - name_category
+        - start_age_category
+        - end_age_category
+      properties:
+        id_category:
+          type: integer
+          example: 1
+        name_category:
+          type: string
+          example: 'Healthy'
+        start_age_category:
+          type: string
+          format: int32
+          example: '2016-08-29T09:12:33.001Z'
+        end_age_category:
+          type: string
+          format: int32
+          example: '2016-08-29T09:12:33.001Z'
+    CategoryRecipes:
+      required:
+        - id_contain
+        - id_categories
+        - id_recipes
+      properties:
+        id_contain:
+          type: integer
+          example: 12
+        id_categories:
+          $ref: '#/components/schemas/CategoryItem'
+        id_recipes:
+          $ref: '#/components/schemas/RecipeItem'
+    RecipeItem:
+      required:
+        - id_recipe
+        - name_recipe
+        - cultery_number_recipe
+        - preparation_time_recipe
+        - total_cooking_time_recipe
+      properties:
+        id_recipe:
+          type: integer
+          example: 14
+        name_recipe:
+          type: string
+          example: 'Tartiflette aux poireaux'
+        cultery_number_recipe:
+          type: integer
+          example: 2
+        preparation_time_recipe:
+          type: integer
+          example: 20
+        total_cooking_time_recipe:
+          type: integer
+          example: 20
+    UserItem:
+      required:
+        - id
+        - firstname
+        - lastname
+        - email
+        - birthdate
+        - id_rights
+      properties:
+          id:
+            type: integer
+            example: 19
+          firstname:
+            type: string
+            example: 'rudy'
+          lastname:
+            type: string
+            example: 'schoepfer'
+          email:
+            type: string
+            example: 'rudy.schoepfer@hotmail.fr'
+          birthdate:
+            type: string
+            format: int32
+            example: '1991-11-30T00:00:00+00:00'
+          id_rights:
+            $ref: '#/components/schemas/RightItem'
+    RightItem:
+      required:
+        - id_right
+        - name_right
+      properties:
+          id:
+            type: integer
+            example: 1
+          firstname:
+            type: string
+            example: 'basic'
+    MealItem:
+      required:
+        - id_meal
+        - name_meal
+      properties:
+          id:
+            type: integer
+            example: 1
+          firstname:
+            type: string
+            example: 'midi'
+    RecipeIdItem:
+      required:
+        - recipe
+        - ingredients
+        - steps
+      properties:
+          recipe:
+            $ref: '#/components/schemas/RecipeItem'
+          ingredients:
+            $ref: '#/components/schemas/IngredientItem'
+          steps:
+            $ref: '#/components/schemas/StepItem'
+    IngredientItem:
+      required:
+        - id_ingredient
+        - name_ingredient
+        - id_season
+        - graduation
+      properties:
+          id_ingredient:
+            type: integer
+            example: 399
+          name_ingredient:
+            type: string
+            example: 'midi'
+          id_season:
+            $ref: '#/components/schemas/SeasonItem'
+          graduation:
+            $ref: '#/components/schemas/GraduationItem'
+    SeasonItem:
+      required:
+        - id_season
+        - name_season
+        - start_date_season
+        - end_date_season
+      properties:
+          id_season:
+            type: integer
+            example: 399
+          name_season:
+            type: string
+            example: 'NO_SEASON'
+          start_date_season:
+            type: string
+            format: int32
+            example: '1991-11-30T00:00:00+00:00'
+          end_date_season:
+            type: string
+            format: int32
+            example: '1991-11-30T00:00:00+00:00'
+    GraduationItem:
+      required:
+        - id_graduation
+        - name_graduation
+      properties:
+          id_graduation:
+            type: integer
+            example: 5
+          name_graduation:
+            type: string
+            example: 'kg'
+    StepItem:
+      required:
+        - number_step
+        - description_step
+      properties:
+          number_step:
+            type: integer
+            example: 4
+          description_step:
+            type: string
+            example: 'Beurrer un plat à gratin. Couper en grosses lamelles la moitié des pommes de terre et les mettre au fond du plat à gratin.'

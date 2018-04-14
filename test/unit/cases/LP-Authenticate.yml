@@ -1,0 +1,144 @@
+openapi: 3.0.0
+# Added by API Auto Mocking Plugin
+servers:
+  - description: Domain API
+    url: https://api.liveperson.net/api
+  - description: Auth API
+    url: https://{apiDomain}/api
+    variables:
+      apiDomain:
+        default: sy.idp.liveperson.net
+info:
+  description: LP Authenticate API
+  version: "1.0.0"
+  title: Liveperson Authenticate API
+  contact:
+    email: sshou@liveperson.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+
+tags:
+  - name: domain api
+    description: get api domain per farm and service
+  - name: web
+    description: Endpoint for web apps
+  - name: app
+    description: Endpoint for mobile apps
+paths:
+  /account/{accountId}/service/{serviceName}/baseURI:
+    get:
+      tags:
+        - domain api
+      description: get service api domain
+      parameters:
+        - in: path
+          name: accountId
+          description: Liveperson account ID
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: serviceName
+          description: Liveperson service name - 'idp'
+          required: true
+          schema:
+            type: string
+            example: idp
+        - in: query
+          name: version
+          description: api version - '1.0'
+          required: true
+          schema:
+            type: string
+            example: 1.0
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/apiDomain'
+  /account/{accountId}/authenticate:
+    post:
+      tags:
+        - web
+      summary: authenticate customer JWT
+      operationId: authenticateWeb
+      description: |
+        Authenticate customer JWT against the pub key configured in LE console
+      parameters:
+        - in: path
+          name: accountId
+          description: Liveperson account ID
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                authCode:
+                  type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  jwt:
+                    type: string
+        '500':
+          description: Failed
+  /account/{accountId}/app/default/authenticate:
+    post:
+      tags:
+        - app
+      summary: authenticate customer JWT
+      operationId: authenticateApp
+      description: |
+        Authenticate customer JWT against the pub key configured in LE console
+      parameters:
+        - in: path
+          name: accountId
+          description: Liveperson account ID
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: v
+          description: api version
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                id_token:
+                  type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  token:
+                    type: string
+        '500':
+          description: Failed
+components:
+  schemas:
+    apiDomain:
+      properties:
+        service:
+          type: string
+        account:
+          type: string
+        baseURI:
+          type: string
+          description: api domain for the specific service
