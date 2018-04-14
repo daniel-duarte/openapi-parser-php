@@ -382,12 +382,14 @@ definitions:
       type:
         type: string
       allOf:
-        type: mixed
-        options:
-          - type: ref
-            spec: Schema
-          - type: ref
-            spec: Reference
+        type: array
+        items:
+          type: mixed
+          options:
+            - type: ref
+              spec: Schema
+            - type: ref
+              spec: Reference
       oneOf:
         type: mixed
         options:

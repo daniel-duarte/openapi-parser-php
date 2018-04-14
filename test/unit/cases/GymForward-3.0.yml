@@ -1,0 +1,1646 @@
+openapi: 3.0.0
+info:
+  version: '1.0.0'
+  title: 'GymForward API 3.0'
+  description: 'This is the GymForward API 3.0 that uses OpenAPI version 3.0.0'
+paths:
+
+  /mapinstanceuser:
+    post:
+      summary: Log the attendance of a user
+      description: Log the attendance of a user
+      tags:
+        - Attendance
+      requestBody:
+        description: Need a user and an (event) instance for posting attendance
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/User'
+                - $ref: '#/components/schemas/Instance'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MapInstanceUser'
+        '400':
+          description: Couldn't log the attendance
+          content:
+            application/json:
+             schema:
+               $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+             schema:
+               $ref: '#/components/schemas/Error'
+
+  /mapinstanceuser/{user-id}:
+    parameters:
+      - $ref: '#/components/parameters/user-id'
+    get:
+      summary: Get the various events (classes) this user has attended
+      description: Get the various events (classes) this user has attended
+      tags:
+        - Attendance
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MapInstanceUser'
+        '400':
+          description: No attendance found
+        '500':
+          description: Unexpected error
+          content:
+            application/json:
+             schema:
+               $ref: '#/components/schemas/Error'
+  /mapinstanceuser/{instance-id}:
+    parameters:
+      - $ref: '#/components/parameters/instance-id'
+    get:
+      summary: Get the list of users who attended this instance of the class
+      description: Get the list of users who attended this instance of the class
+      tags:
+        - Attendance
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MapInstanceUser'
+        '400':
+          description: No attendance found
+        '500':
+          description: Unexpected error
+          content:
+            application/json:
+             schema:
+               $ref: '#/components/schemas/Error'
+
+  /instructors:
+    get:
+      summary: Gets a list of the instructors
+      description: Gets a list of the instructors
+      tags:
+        - Instructor
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Instructors'
+        '400':
+          description: Couldn't get attendance
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+             schema:
+               $ref: '#/components/schemas/Error'
+  /instructors/{instructor-id}/events:
+    parameters:
+      - name: instructor-id
+        in: path
+        description: This is the unique identifier for the instructor
+        required: true
+        schema:
+          type: string
+    get:
+      summary: Gets a list of the events by the instructor with id="instructor-id"
+      description: Gets a list of the events by the instructor with id="instructor-id"
+      tags:
+        - Instructor
+
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+              examples:
+                Swim:
+                  value:
+                    id: 1
+                    description: Swimm class for tots
+                    isFullDay: false
+                    startdate: 2018-01-02
+                    count: 10
+                TaeKwonDo:
+                  value:
+                    id: 2
+                    description: TKD for all
+                    isFullDay: false
+                    startdate: 2018-04-03
+                    count: 5
+        '400':
+          description: No event found
+        '500':
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+
+  /offerings:
+    post:
+      summary: Add an offering
+      tags:
+        - Offerings
+      parameters:
+        - name: offering
+          in: query
+          description: Offering information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Offerings'
+      responses:
+        '200':
+          description: Success
+        '500':
+          description: An unexpected error occurred
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    patch:
+      summary: Edit an offering
+      tags:
+        - Offerings
+      parameters:
+        - name: offering
+          in: query
+          description: Offering information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Offerings'
+      responses:
+        '200':
+          description: Success
+        '500':
+          description: An unexpected error occurred
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    get:
+      summary: Gets a list of offerings
+      description: Gets a list of offerings
+      tags:
+        - Offerings
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Offerings'
+        '400':
+          description: No Offerings found
+        '500':
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /offerings/{offering-id}:
+    parameters:
+      - $ref: '#/components/parameters/offering-id'
+    get:
+      summary: Returns a list of offerings with this offering-id
+      description: Returns a list of offerings with this offering-id
+      tags:
+        - Offerings
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Offerings'
+        '400':
+          description: No event found
+        '500':
+          description: Unexpected error
+          content:
+            application/json:
+             schema:
+               $ref: '#/components/schemas/Error'
+  /tags:
+    get:
+      summary: Gets a list of tags
+      description: Gets a list of tags
+      tags:
+        - Tags
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tags'
+        '400':
+          description: No Offerings found
+        '500':
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /tags/{tag-id}/offerings:
+    parameters:
+      - $ref: '#/components/parameters/tag-id'
+    get:
+      summary: Returns a list of offerings under this tag
+      description: Returns a list of offerings under this tag
+      tags:
+        - Tags
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Offerings'
+        '400':
+          description: No event found
+        '500':
+          description: Unexpected error
+          content:
+            application/json:
+             schema:
+               $ref: '#/components/schemas/Error'
+  /offerings/{tag-id}:
+    parameters:
+      - $ref: '#/components/parameters/tag-id'
+    get:
+      summary: Returns a list of offerings with this tag-id
+      description: Returns a list of offerings with this tag-id. For eg., retuns all the classes (offerings) offered in the summer (tag).
+      tags:
+        - Offerings
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Offerings'
+        '400':
+          description: No Offerings found
+        '500':
+          description: Unexpected error
+          content:
+            application/json:
+             schema:
+               $ref: '#/components/schemas/Error'
+
+  /users:
+    get:
+      summary: Gets the list of users in the system.
+      description: Gets the list of users in the system.
+      tags:
+        - Users
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Users'
+        '400':
+          description: Get the list of users
+        '500':
+          description: An unexpected error occurred
+    post:
+      summary: Add a new user to an existing account or a new account
+      description: Add a new user to an existing account or a new account
+      tags:
+        - Users
+      parameters:
+        - name: user
+          in: query
+          description: User information
+          required: true
+          schema:
+            $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: The person was successfully added
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '500':
+          description: An unexpected error occurred
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /users/{user-id}:
+    parameters:
+      - $ref: '#/components/parameters/user-id'
+    get:
+      summary: Get the user with this User id
+      description: Returns the person with this User id
+      tags:
+        - Users
+      responses:
+        '200':
+          description: A person's information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: The person doesn't exist
+        '500':
+          description: An unexpected error occurred
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    patch:
+      summary: Update specified user fields with this user-id
+      description: Update specified user fields with this user-id
+      tags:
+        - Users
+      parameters:
+        - name: users
+          in: query
+          description: User information
+          required: true
+          schema:
+            $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: A person's information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: The person doesn't exist
+        '500':
+          description: An unexpected error occurred
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /users/{user-id}/offerings:
+    parameters:
+      - $ref: '#/components/parameters/user-id'
+    get:
+      summary: Get all classes signed up by the user with the id="user-id"
+      description: Get all classes signed up by the user with the id="user-id"
+      tags:
+        - Users
+      responses:
+        '200':
+          description: Got the list of events signed up by the user with id="user-id"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Offerings'
+        '404':
+          description: No event found
+        '500':
+          description: An unexpected error occurred
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /users/{user-id}/membership:
+    parameters:
+      - $ref: '#/components/parameters/user-id'
+    get:
+      summary: Get all memberships that this user has had with this gym
+      description: Get all memberships that this user has had with this gym
+      tags:
+        - Users
+      responses:
+        '200':
+          description: Got the list of memberships that this user has had with this gym.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MapUserMemberships'
+        '404':
+          description: No event found
+        '500':
+          description: An unexpected error occurred
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /transactions:
+    get:
+      summary: Get all transactions between start and end dates
+      description: Get all transactions between start and end dates
+      tags:
+        - Transactions
+      parameters:
+        - name: start_date
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+            description: The start date for the report
+        - name: end_date
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+            description: The end date for the report
+      responses:
+        '200':
+          description: Get all the transactions after a certain date
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transactions'
+        '500':
+          description: An unexpected error occurred
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /transactions/{user-id}:
+    parameters:
+      - $ref: '#/components/parameters/user-id'
+    get:
+      summary: Get all transactions connected to the user with the id="user-id"
+      description: Get all transactions connected to the user with the id="user-id"
+      tags:
+        - Transactions
+      responses:
+        '200':
+          description: Got the list of transactions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transactions'
+        '500':
+          description: An unexpected error occurred
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /memberships:
+    get:
+      summary: Gets the list of all memberships
+      description: Get the list of all memberships
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Memberships'
+        '400':
+          description: No membership exists
+        '500':
+          description: Unexpected error
+  /memberships/{user-id}:
+    parameters:
+      - $ref: '#/components/parameters/user-id'
+    get:
+      summary: Get all memberships connected with this user with id="user-id"
+      description: Get all memberships connected with this user with id="user-id"
+      tags:
+        - Membership
+      responses:
+        '200':
+          description: Got the list of memberships
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Membership'
+        '500':
+          description: An unexpected error occurred
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /memberships/{membership-id}:
+    parameters:
+      - $ref: '#/components/parameters/membership-id'
+    get:
+      summary: Get all memberships connected with this membership-id.
+      description: Get all memberships connected with this membership-id
+      tags:
+        - Membership
+      responses:
+        '200':
+          description: Got the list of memberships
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Membership'
+        '500':
+          description: An unexpected error occurred
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /accounts:
+    get:
+      summary: Get the list of all accounts in the system
+      description: Get the list of all accounts in the system
+      tags:
+        - Accounts
+      responses:
+        '200':
+          description: Get the list of accounts
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Accounts'
+  /accounts/{user-id}:
+    parameters:
+      - $ref: '#/components/parameters/user-id'
+    get:
+      summary: Get the account information for this id
+      description: Get the account information for this id
+      tags:
+        - Accounts
+      responses:
+        '200':
+          description: Got the account information for this user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+        '404':
+          description: The user doesn't exist
+        '500':
+          description: An unexpected error occurred
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /login:
+    post:
+      summary: Log in a user
+      description: Log in this user
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: sujatha@purelynx.com
+
+                password:
+                  type: string
+                  example: 83kdsh^83dl
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Couldn't log in the user
+  /logout:
+    post:
+      summary: Log out the user
+      description: Log out the user
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: Successfully logged in
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Couldn't log out the user
+components:
+  schemas:
+    Account:
+      type: object
+      description: Accounts consists of a group of one or more Users
+      properties:
+        id:
+          type: string
+          example: 'Mem-001'
+          description: Uniquely identifies this account
+        active:
+          type: boolean
+          example: True
+          description: True means this account is still active.
+        address:
+          type: object
+          items:
+            $ref: '#/components/schemas/Address'
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+          description: Contains all the users that are under this account.
+    Accounts:
+      type: array
+      items:
+        $ref: '#/components/schemas/Account'
+    Address:
+      type: object
+      description: This contains the physical/mailing address.
+      properties:
+        line1:
+          type: string
+          example: 123 Main Street
+          description: Generally street name and address
+        line2:
+          type: string
+          example: ''
+          description: If you need another line for the address, use this.
+        city:
+          type: string
+          example: 'Plainesville'
+          description: Name of the city
+        state:
+          type: string
+          example: 'AK'
+          description: State or province
+        postal:
+          type: string
+          example: '11974-9475'
+          description: Postal code
+        country:
+          type: string
+          example: 'United States of America'
+          description: Country name
+
+    Contact:
+      type: object
+      description: Contains the contact information and includes name, email & phone number.
+      properties:
+        first:
+          type: string
+          description: First name
+        middle:
+          type: string
+          description: Middle name
+        last:
+          type: string
+          description: Last name of the contact
+        label:
+          type: string
+          description: Label for the relationship
+        emails:
+          type: array
+          items:
+            $ref: '#/components/schemas/Email'
+        phones:
+          type: array
+          items:
+            $ref: '#/components/schemas/Phone'
+      example:
+        first: 'John'
+        middle: 'C'
+        last: 'Oliver'
+        label: 'neighbor'
+        emails:
+          - label: 'Personal'
+            email: 'person@home.com'
+          - label: 'Work'
+            email: 'person@work.com'
+        phones:
+          - id: 'ph-1'
+            text: true
+            voice: false
+            label: 'mobile'
+            number: '408-928-8463'
+          - id: 'ph-2'
+            text: false
+            voice: true
+            label: 'home'
+            number: '650-377-0123'
+    Discount:
+      type: object
+      description: Contains information about a discount
+      properties:
+        id:
+          type: string
+          example: 'disc-001'
+          description: Unique id of this discount
+        name:
+          type: string
+          example: 'Resident'
+        description:
+          type: string
+          example: 'Resident discount'
+        type:
+          type: string
+          example: 'dollar'
+          description: ENUM - percent, dollar
+        value:
+          type: number
+          example: '20'
+          description: $20 will be the discount
+        date:
+          type: string
+          example: '02-02-2017'
+          description: The date when this discount was applied.
+    Email:
+      type: object
+      description: Contains an email address along with a label for it.
+      properties:
+        label:
+          type: string
+          example: 'Personal'
+          description: Label for this email
+        email:
+          type: string
+          example: 'bob@gmail.com'
+          description: Email address
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          example: '404'
+          description:  Error code
+        message:
+          type: string
+          example: 'Page not found'
+          description: Message that goes with the error code
+    Event:
+      type: object
+      description: It is a class or an event that a user can sign up for.
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          example: 'event-001'
+          description: Unique id of this event
+        description:
+          type: string
+          example: 'This is an event of an offering'
+        offeringID:
+          type: integer
+          example: 5
+        isFullDay:
+          type: boolean
+          example: False
+        startDate:
+          type: string
+          example: '2018-04-15'
+        startTime:
+          type: string
+          example: '04:05 PM'
+        count:
+          type: integer
+          example: 10
+        incUnit:
+          type: integer
+          example: 7
+        duration:
+          type: integer
+          example: 60
+        instances:
+          type: array
+          items:
+            $ref: '#/components/schemas/Instance'
+          description: List of event instances that make up this Event.
+        exceptions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Exception'
+          description: List of event exceptions for this Event.
+
+    Exception:
+      type: object
+      description: Contains the day that an event doesn't occur due to some reason, like a holiday or bad weather, and if rescheduled, the rescheduled date.
+      properties:
+        id:
+          type: string
+          example: '739dk-0ien7-73hdk'
+          description: Uniquely identifies this exception.
+        eventId:
+          type: string
+          example: '98jeifn'
+          description: Uniquely identifies the event.
+        type:
+          type: string
+          example: 'Holiday'
+          description: Gives the reason or type this exception.
+        affected:
+          type: string
+          example: '2018-03-02'
+          description: This is the date when the event won't take place or is cancelled.
+        rescheduled:
+          type: string
+          example: '2018-03-04'
+          description: This is the date that the event will now take place. This will be empty if the event won't be rescheduled. For example, if a swim lesson is every Monday for 4 weeks and one of the Mondays is July 4th, then it can be planned ahead that there won't be a class on this day. In that case, this field will be left empty.
+    Instance:
+      type: object
+      description: This has the information regarding a particular day/time when the event takes place. The event itself can be a one-time event or an ongoing event. This is important to keep track of attendance.
+      properties:
+        id:
+          type: string
+          example: '87ejncijnehfn'
+          description: Uniquely identifies an occurrence of a class or an Event.
+        eventId:
+          type: string
+          example: '09jenkd'
+          description: Uniquely identifies the Event of which this Instance is an occurrence.
+        eventDate:
+          type: string
+          example: '2018-05-03'
+          description: Date when this Instance will occur.
+    Instructor:
+      type: object
+      description: This has information about the instructor
+      properties:
+        id:
+          type: string
+          description: Unique identifier for this instructor
+          example: 'user-01'
+        first:
+          type: string
+          description: First name of this instructor
+          example: 'Neena'
+        middle:
+          type: string
+          description: Middle name of this intructor
+          example: 'C'
+        last:
+          type: string
+          description: Last name of this instructor
+          example: 'Marsden'
+        access:
+          type: string
+          description: Type of access this instrutor has to the account
+          example: 'instructor'
+        gender:
+          type: string
+          description: Gender this instructor identifies as-Male, Female, Other
+          example: 'female'
+        bio:
+          type: string
+          description: The instructor's bio
+          example: 'I have been an instructor for many years and love working with kids.'
+        address:
+          type: object
+          description: Address of the instructor
+          items:
+            $ref: '#/components/schemas/Address'
+        emails:
+          type: array
+          description: Array of emails associated with this instructor
+          items:
+            $ref: '#/components/schemas/Email'
+          example:
+            - id: 'email-1'
+              label: 'home'
+              email: 'neena@yahoo.com'
+            - id: 'email-2'
+              label: 'work'
+              email: 'neena@work.com'
+        phones:
+          type: array
+          items:
+            $ref: '#/components/schemas/Phone'
+          example:
+            - id: '45q25q43'
+              text: true
+              voice: false
+              label: 'mobile'
+              number: '408-928-8463'
+            - id: 'phone-2'
+              text: false
+              voice: true
+              label: 'home'
+              number: '650-377-0123'
+        contacts:
+          type: array
+          description: An array of contact people for this instructor
+          items:
+            $ref: '#/components/schemas/Contact'
+        events:
+          type: array
+          description: An array of events that this instructor is signed up to teach
+          items:
+            $ref: '#/components/schemas/Event'
+    Instructors:
+      type: array
+      description: Array of instructors
+      items:
+        $ref: "#/components/schemas/Instructor"
+    Location:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '7dhedmc89'
+          description: Uniquely identifies this location.
+        name:
+          type: object
+          example: 'San Mateo'
+          description: Name of the location as described by the organization.
+        address:
+          type: object
+          description: Address of the location
+          items:
+            $ref: '#/components/schemas/Address'
+        phones:
+          type: array
+          description: Phone number of the organization
+          items:
+            $ref: '#/components/schemas/Phone'
+        events:
+          type: array
+          items:
+            $ref: '#/components/schemas/Event'
+          description: List of events that takes place at this location.
+    MapInstanceUser:
+      type: object
+      description: This gives you the attendance information of a user at a particular instance of an event. Also, to get the list of people who attended a certain event.
+      properties:
+        id:
+          type: string
+          description: Unique identifier
+        instance:
+          type: integer
+          description: Unique identifier for the instance of the event.
+        userId:
+          type: integer
+          description: Unique identifier for the user.
+    MapMembershipOffering:
+      type: object
+      description: This gives you which Offerings are open to which Membership Types and at what price. For example, people with Swim membership (Membership) can take swim private lessons (offerings) at $40.50.
+      properties:
+        id:
+          type: string
+          description: Unique identifier for this information.
+        membershipId:
+          type: string
+          example: '4b18-8d61'
+          description: Gives the id of the membership type.
+        userTypeId:
+          type: string
+          example: 'a709f14b-b38d-4b18-8d61-ee67704e66d6'
+          description: Gives the id of the user type.
+        offeringId:
+          type: string
+          example: 'ee67704e66d6'
+          description: Gives the id of a specific offering.
+        price:
+          type: number
+          example: 40.50
+          description: Contains the price for this relationship.
+        startDate:
+          type: string
+          example: '2016-05-03'
+          description: Date when this began to be offered.
+        endDate:
+          type: string
+          example: '2018-03-02'
+          description: Date when this ended or will end.
+    MapOfferingTag:
+      type: object
+      description: This can tell you all the offerings under a tag and the tag of a particular offering
+      properties:
+        id:
+          type: string
+          description: Uniquely identifies this relationship
+          example: 'mot-001'
+        offeringId:
+          type: string
+          description: Uniquely identifies this offering
+          example: 'offid-001'
+        tagId:
+          type: string
+          description: Uniquely identifies this tag
+          example: 'tag-001'
+    MapUserMembership:
+      type: object
+      description:
+        This is the membership for a particular user. This class can tell us when they joined and when their renewal is. Also, the list of people in a particular membership.
+      properties:
+        id:
+          type: string
+          description: Uniquely identifies this membership
+          example: 'memid-001'
+        userId:
+          type: string
+          description: Uniquely identifies a user
+          example: 'userid-001'
+        membershipId:
+          type: string
+          description: Uniquely identifies a membership type
+          example: 'Tennis only'
+        start:
+          type: string
+          description: Date when this user became a member under this membershipId.
+          example: '2017-01-02'
+        end:
+          type: string
+          description: Date after which this membership needs to be renewed by this user.
+          example: '2017-03-04'
+    MapUserMemberships:
+      type: array
+      description: Array of user-membership connections
+      items:
+        $ref: '#/components/schemas/MapUserMembership'
+
+    MapOfferingUser:
+      type: object
+      description: Given a user, this can tell you all the offerings signed up for and given an offering, it can tell you all the users signed up for it.
+      properties:
+        id:
+          type: string
+          description: Uniquely identifies this MapUserOffering
+          example: 'muo-id-001'
+        userId:
+          type: string
+          description: Uniquely identifies a user
+          example: 'userid-001'
+        offeringId:
+          type: string
+          description: Uniquely identifies a offering
+          example: 'Tennis'
+    Membership:
+      type: object
+      description: This is the type(s) of membership that this gym offers.
+      properties:
+        id:
+          type: string
+          example: 'memid-001'
+          description: Uniquely identifies this membership type
+        name:
+          type: string
+          description: Name/title of the offering
+          example: 'Swim and Tennis membership'
+        description:
+          type: string
+          description: Describes this Offering.
+          example: 'Anyone who wants to use the pool and tennis courts'
+        start:
+          type: string
+          example: '2018-04-05'
+          description: Date when this Membership started to be offered.
+        end:
+          type: string
+          example: '2019-05-05'
+          description: Date after which this Membership will not be offered or wasn't offered.
+    Memberships:
+      type: array
+      description: This is an array of memberships
+      items:
+        $ref: "#/components/schemas/Membership"
+    Message:
+      type: object
+      required:
+        - userID
+      description:
+        This contains information about emails/texts that have been sent from the system.
+      properties:
+        userId:
+          type: string
+          example: 'a709f14b-b38d-4b18-8d61-ee67704e66d6'
+          description: Unique identifier for this message
+        phones:
+          type: array
+          description: Array of phones that received this message
+          items:
+            $ref: '#/components/schemas/Phone'
+        emails:
+          type: array
+          description: Array of emails that received this message
+          items:
+            $ref: '#/components/schemas/Email'
+        date:
+          type: string
+          example: '2018-03-16T16:41:00.787Z'
+          description: Date this message was sent
+        body:
+          type: string
+          description: Body of the message (email or text) that was sent
+          example: 'This is to remind you of your upcoming class'
+    Offering:
+      type: object
+      required:
+        - id
+      description: This gives you all that is offered by this organization.
+      properties:
+        id:
+          type: string
+          description: Uniquely identifies this offering
+          example: 'offering-12'
+        name:
+          type: string
+          description: Name/title of the offering
+          example: 'Tae Kwon Do for teens'
+        description:
+          type: string
+          description: Describes this Offering.
+          example: 'This is a class for teen Tae Kwon Do enthusiasts'
+        min:
+          type: string
+          description: Minimum age for enrolling in an Event under this Offering
+          example: '13'
+        max:
+          type: string
+          description: Maximum age for enrolling in an Event under this Offering
+          example: '19'
+        unit:
+          type: string
+          example: 'year'
+          description: This tells you the unit in which the age is considered
+        minEnroll:
+          type: number
+          example: 3
+          description: Minimum number of enrollees required for this Offering
+        maxEnroll:
+          type: number
+          example: 10
+          description: Maximun number of enrollees that can be accommodated in this Offering
+        events:
+          type: array
+          description: Array of all Events that are offered under this Offering
+          items:
+            $ref: '#/components/schemas/Event'
+        memberships:
+          type: array
+          description: Lists the membership-offering pairs with pricing and dates
+          items:
+            $ref: '#/components/schemas/MapMembershipOffering'
+        tag:
+          type: array
+          description: Lists the tag-offering pairs
+          items:
+            $ref: '#/components/schemas/MapOfferingTag'
+        users:
+          type: array
+          description: Lists the user-offering pairs
+          items:
+            $ref: '#/components/schemas/MapOfferingUser'
+    Offerings:
+      type: array
+      description: This is an array of offerings
+      items:
+        $ref: "#/components/schemas/Offering"
+    Organization:
+      type: object
+      description:
+        This contains all the information about the particular organization/gym.
+      properties:
+        id:
+          type: string
+          description: Unique identifier for this Organization
+          example: '7henkke7'
+        name:
+          type: string
+          description: Name of the organization
+          example: 'Ladera Recreation District'
+        email:
+          type: string
+          example: 'info@laderarec.org'
+          description: This is the email that people outside write to.
+        from:
+          type: string
+          example: 'noreplay@laderarec.org'
+          description: This is the email that sends people canned emails.
+        cc:
+          type: string
+          example: 'manager@laderarec.org'
+          description: This is the email that it is cc-ed to.
+        locations:
+          type: array
+          items:
+            $ref: '#/components/schemas/Location'
+        templates:
+          type: array
+          items:
+            $ref: '#/components/schemas/Template'
+    Phone:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          description: Unique identifier for this Phone
+        text:
+          type: boolean
+          description: If true, this phone can receive texts
+        voice:
+          type: boolean
+          description: If false, this phone shouldn't receive any calls.
+        label:
+          type: string
+          description: Label for this phone number
+        number:
+          type: string
+          description: Phone number
+      example:
+        id: 'user-003'
+        text: true
+        voice: false
+        label: 'mobile'
+        number: '781-862-6549'
+    Phones:
+      type: array
+      description: An array of phone numbers
+      items:
+        $ref: '#/components/schemas/Phone'
+
+    Tag:
+      type: object
+      description: This is used to categorize the various offerings.
+      properties:
+        id:
+          type: string
+          description: Unique identifier for this Tag
+          example: '83f7wj39'
+        name:
+          type: string
+          description: Name of the grouping/Tag
+          example: 'Summer 2017'
+        description:
+          type: string
+          description: Description of this Tag
+          example: 'All classes and events during the summer of 2017'
+    Tags:
+      type: array
+      description: An array of tags
+      items:
+        $ref: '#/components/schemas/Tag'
+    Template:
+      type: object
+      description:
+        This would contain templates for regularly sent emails and texts.
+      properties:
+        id:
+          type: string
+          description: Unique identifier for this template
+          example: 'enf836jf'
+        name:
+          type: string
+          description: Name for this template
+          example: 'New membership'
+        message:
+          type: string
+          description: Text of this template
+          example: 'Welcome to All Stars Martial Arts! Your membership is valid till April 2019.'
+    Transaction:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for this Transaction
+        type:
+          type: string
+          description: ENUM - invoice, credit, payment
+        description:
+          type: string
+          description: Describes the transaction
+        userId:
+          type: string
+          description: Uniquely identifies a user
+        offeringId:
+          type: string
+          description: Uniquely identifies an offering
+        amount:
+          type: number
+          description: Transaction amount
+        date:
+          type: string
+          description: Date this transaction happened
+        discounts:
+          type: array
+          description: List of discounts associated with this transaction
+          items:
+            $ref: '#/components/schemas/Discount'
+    Transactions:
+      type: array
+      description: An array of transactions
+      items:
+        $ref: '#/components/schemas/Transaction'
+      example:
+        - id: 'T-001'
+          type: 'invoice'
+          description: 'Swim class for teens'
+          userId: 'userid-001'
+          amount: 40.00
+          date: '2018-03-03'
+        - id: 'T-002'
+          type: 'payment'
+          description: 'Camp for tweens'
+          userId: 'userid-001'
+          amount: 340.00
+          date: '2018-01-03'
+    UserType:
+      type: object
+      description: Model of any user that uses this system
+      properties:
+        id:
+          type: string
+          description: Unique identifier for this UserType
+        name:
+          type: string
+          description: Name of this UserType
+        description:
+          type: string
+          description: Describes this UserType
+      example:
+        - id: 'asdf'
+          name: 'Resident'
+          description: 'Resides in the Highlands area'
+        - id: '9sjtr'
+          name: 'Senior'
+          description: 'Over the age of 65'
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for this User
+        first:
+          type: string
+          description: First name of this User
+        middle:
+          type: string
+          description: Middle name of this user
+        last:
+          type: string
+          description: Last name of this user
+        birth:
+          type: string
+          description: Birth date of this user
+        access:
+          type: string
+          description: Type of access this user has to the account
+        gender:
+          type: string
+          description: Gender this user identifies as-Male, Female, Other
+        emails:
+          type: array
+          description: Array of emails associated with this user
+          items:
+            $ref: '#/components/schemas/Email'
+        phones:
+          type: array
+          description: Array of phone numbers
+          items:
+            $ref: '#/components/schemas/Phone'
+        contacts:
+          type: array
+          description: An array of contact people for this user
+          items:
+            $ref: '#/components/schemas/Contact'
+        types:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserType'
+        offerings:
+          type: array
+          description: An array of offerings signed up for by this user
+          items:
+            $ref: '#/components/schemas/MapOfferingUser'
+        memberships:
+          type: array
+          description: This gives all the memberships that this user has or has had with this gym.
+          items:
+            $ref: '#/components/schemas/MapUserMembership'
+        messages:
+          type: array
+          description: Gives all the messages sent to this user
+          items:
+            $ref: '#/components/schemas/Message'
+      required:
+        - id
+      example:
+        id: 'userid-001'
+        first: 'Bobbie'
+        last: 'Smith'
+        birth: '1990-02-01'
+        access: 'admin'
+        gender: 'male'
+        memberships:
+          - id: 'mem-002'
+            name: 'Swim and Tennis'
+            start: '2017-05-05'
+            end: '2018-05-05'
+        emails:
+          - label: 'Personal'
+            email: 'person@home.com'
+          - label: 'Work'
+            email: 'person@work.com'
+          - label: 'home'
+            email: 'me@yahoo.com'
+          - label: 'work'
+            email: 'me@work.com'
+        phones:
+          - id: '45q25q43'
+            text: false
+            voice: true
+            label: 'home'
+            number: '650-572-8297'
+          - id: 'user-003'
+            text: true
+            voice: false
+            label: 'mobile'
+            number: '781-862-6549'
+        contacts:
+          - first: 'John'
+            middle: 'C'
+            last: 'Oliver'
+            label: 'neighbor'
+            emails:
+              - label: 'Personal'
+                email: 'person@home.com'
+              - label: 'Work'
+                email: 'person@work.com'
+            phone:
+              - id: 'ph-1'
+                text: true
+                voice: false
+                label: 'mobile'
+                number: '408-928-8463'
+              - id: 'ph-2'
+                text: false
+                voice: true
+                label: 'home'
+                number: '650-377-0123'
+
+    Users:
+      type: array
+      items:
+        $ref: "#/components/schemas/User"
+      example:
+        - id: 'userid-001'
+          first: 'Bobby'
+          last: 'Smith'
+          birth: '1990-02-01'
+          access: 'admin'
+          gender: 'male'
+          memberships:
+            - id: 'mem-002'
+              name: 'Swim and Tennis'
+              start: '2017-05-05'
+              end: '2018-05-05'
+          emails:
+            - label: 'Personal'
+              email: 'person@home.com'
+            - label: 'Work'
+              email: 'person@work.com'
+            - label: 'home'
+              email: 'me@yahoo.com'
+            - label: 'work'
+              email: 'me@work.com'
+          phones:
+            - id: '45q25q43'
+              text: false
+              voice: true
+              label: 'home'
+              number: '650-572-8297'
+            - id: 'user-003'
+              text: true
+              voice: false
+              label: 'mobile'
+              number: '781-862-6549'
+          contacts:
+            - first: 'John'
+              middle: 'C'
+              last: 'Oliver'
+              label: 'neighbor'
+              emails:
+                - label: 'Personal'
+                  email: 'person@home.com'
+                - label: 'Work'
+                  email: 'person@work.com'
+              phones:
+                - id: 'ph-1'
+                  text: true
+                  voice: false
+                  label: 'mobile'
+                  number: '408-928-8463'
+                - id: 'ph-2'
+                  text: false
+                  voice: true
+                  label: 'home'
+                  number: '650-377-0123'
+        - id: 'userid-002'
+          first: 'Jean'
+          last: 'Smith'
+          birth: '1991-02-01'
+          access: 'enduser'
+          gender: 'female'
+        - id: 'userid-003'
+          first: 'Larry'
+          last: 'David'
+          birth: '1969-02-01'
+          access: 'enduser'
+          gender: 'male'
+        - id: 'userid-004'
+          first: 'Debra'
+          last: 'Messinger'
+          birth: '1975-02-01'
+          access: 'enduser'
+          gender: 'female'
+  parameters:
+    end-date:
+      name: end-date
+      required: true
+      in: query
+      schema:
+        type: string
+    event-id:
+      name: event-id
+      in: path
+      required: true
+      description: The unique Event id
+      schema:
+        type: string
+    instance-id:
+      name: instance-id
+      in: path
+      required: true
+      description: The unique instance id
+      schema:
+        type: string
+    instructor-id:
+      name: instructor-id
+      in: path
+      required: true
+      description: The unique Instructor id
+      schema:
+        type: string
+    membership-id:
+      name: membership-id
+      in: path
+      required: true
+      description: The unique id for a membership
+      schema:
+        type: string
+    offering-id:
+      name: offering-id
+      in: path
+      required: true
+      description: The unique Offering id
+      schema:
+        type: string
+    start-date:
+      name: start-date
+      required: true
+      in: path
+      schema:
+        type: string
+    tag-id:
+      name: tag-id
+      required: true
+      in: path
+      schema:
+        type: string
+    user-id:
+      name: user-id
+      in: path
+      required: true
+      description: The unique User id
+      schema:
+        type: string
+
+# Added by API Auto Mocking Plugin
+servers:
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/purelynx/GymForward-3.0/1.0.0
