@@ -2,6 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 use OpenApi\SpecLoader;
+use OpenSpec\Spec\OpenSpec;
 
 
 final class SpecLoaderTest extends TestCase
@@ -14,13 +15,13 @@ final class SpecLoaderTest extends TestCase
 
         try {
             $specLoader = new SpecLoader();
-            $openApiSpec = $specLoader->getOpenApiSpec();
+            $openApiMetaSpec = $specLoader->getOpenApiSpec();
         } catch (\Exception $ex) {
             $error = true;
         }
 
         $this->assertFalse($error, "There was an error loading the OpenApi spec.");
-        $this->assertInstanceOf(\OpenSpec\Spec\OpenSpec::class, $openApiSpec);
-        $this->assertEquals('OpenApi', $openApiSpec->getName());
+        $this->assertInstanceOf(OpenSpec::class, $openApiMetaSpec);
+        $this->assertEquals('OpenApi', $openApiMetaSpec->getName());
     }
 }

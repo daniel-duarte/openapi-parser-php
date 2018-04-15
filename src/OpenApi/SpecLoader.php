@@ -2,6 +2,7 @@
 
 namespace OpenApi;
 
+use OpenSpec\Entity;
 use OpenSpec\Spec\OpenSpec;
 use Symfony\Component\Yaml\Yaml;
 
@@ -53,8 +54,8 @@ class SpecLoader
         return $this->loadApiSpec($apiSpecData);
     }
 
-    public function loadApiSpec(array $specData): array
+    public function loadApiSpec(array $specData): Entity
     {
-        return $this->_openApiSpec->validateGetErrors($specData);
+        return $this->_openApiSpec->parse($specData);
     }
 }
