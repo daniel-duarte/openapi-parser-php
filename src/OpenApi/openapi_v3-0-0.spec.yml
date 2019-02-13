@@ -3,7 +3,6 @@ name: OpenApi
 version: 3.0.1
 
 # @todo specify required fields
-# @todo implement x-* extensions
 
 spec:
   type: object
@@ -46,6 +45,9 @@ spec:
       type: ref
       spec: ExternalDocumentation
 
+  extensible: true
+  extensionFieldNamesPattern: ^x-
+
 definitions:
 
   ApiInfo:
@@ -65,6 +67,8 @@ definitions:
         spec: License
       version:
         type: string
+    extensible: true
+    extensionFieldNamesPattern: ^x-
 
   Contact:
     type: object
@@ -75,6 +79,8 @@ definitions:
         type: string
       email:
         type: string
+    extensible: true
+    extensionFieldNamesPattern: ^x-
 
   License:
     type: object
@@ -83,6 +89,8 @@ definitions:
         type: string
       url:
         type: string
+    extensible: true
+    extensionFieldNamesPattern: ^x-
 
   Server:
     type: object
@@ -97,6 +105,8 @@ definitions:
         extensionFields:
           type: ref
           spec: ServerVariable
+    extensible: true
+    extensionFieldNamesPattern: ^x-
 
   ServerVariable:
     type: object
@@ -109,6 +119,8 @@ definitions:
         type: string
       description:
         type: string
+    extensible: true
+    extensionFieldNamesPattern: ^x-
 
   Paths:
     type: object
@@ -116,6 +128,7 @@ definitions:
     extensionFields:
       type: ref
       spec: PathItem
+    # @todo Implement ^x- fields for this spec
 
   PathItem:
     type: object
@@ -164,6 +177,8 @@ definitions:
               spec: Parameter
             - type: ref
               spec: Reference
+    extensible: true
+    extensionFieldNamesPattern: ^x-
 
   Operation:
     type: object
@@ -222,6 +237,8 @@ definitions:
         items:
           type: ref
           spec: Server
+    extensible: true
+    extensionFieldNamesPattern: ^x-
 
   Parameter:
     type: object
@@ -270,12 +287,16 @@ definitions:
         extensionFields:
           type: ref
           spec: MediaType
+    extensible: true
+    extensionFieldNamesPattern: ^x-
 
   Reference:
     type: object
     fields:
       $ref:
         type: string
+    extensible: true
+    extensionFieldNamesPattern: ^x-
 
   ExternalDocumentation:
     type: object
@@ -284,8 +305,11 @@ definitions:
         type: string
       url:
         type: string
+    extensible: true
+    extensionFieldNamesPattern: ^x-
 
   Callback:
+    # @todo Implement ^x- fields for this spec
     type: object
     extensible: true
     extensionFields:
@@ -335,6 +359,8 @@ definitions:
         extensionFields:
           type: ref
           spec: Encoding
+    extensible: true
+    extensionFieldNamesPattern: ^x-
 
   Schema:
     type: object
@@ -463,6 +489,8 @@ definitions:
         spec: Any
       deprecated:
         type: boolean
+    extensible: true
+    extensionFieldNamesPattern: ^x-
 
   Number:
     type: mixed
@@ -494,6 +522,8 @@ definitions:
         spec: Any
       extenralValue:
         type: string
+    extensible: true
+    extensionFieldNamesPattern: ^x-
 
   Encoding:
     type: object
@@ -516,6 +546,8 @@ definitions:
         type: boolean
       allowReserved:
         type: boolean
+    extensible: true
+    extensionFieldNamesPattern: ^x-
 
   Header:
     type: object
@@ -560,6 +592,8 @@ definitions:
         extensionFields:
           type: ref
           spec: MediaType
+    extensible: true
+    extensionFieldNamesPattern: ^x-
 
   Responses:
     type: object
@@ -579,6 +613,7 @@ definitions:
           spec: Response
         - type: ref
           spec: Reference
+    # @todo Add pattern for extension field names (HTTP codes).
 
   Response:
     type: object
@@ -639,6 +674,8 @@ definitions:
       server:
         type: ref
         spec: Server
+    extensible: true
+    extensionFieldNamesPattern: ^x-
 
   Tag:
     type: object
@@ -650,6 +687,8 @@ definitions:
       externalDocs:
         type: ref
         spec: ExternalDocumentation
+    extensible: true
+    extensionFieldNamesPattern: ^x-
 
   Components:
     type: object
@@ -744,6 +783,8 @@ definitions:
               spec: Callback
             - type: ref
               spec: Reference
+    extensible: true
+    extensionFieldNamesPattern: ^x-
 
   SecurityScheme:
     type: object
@@ -781,6 +822,8 @@ definitions:
       authorizationCode:
         type: ref
         spec: OAuthFlow
+    extensible: true
+    extensionFieldNamesPattern: ^x-
 
   OAuthFlow:
     type: object
@@ -796,6 +839,8 @@ definitions:
         extensible: true
         extensionFields:
           type: string
+    extensible: true
+    extensionFieldNamesPattern: ^x-
 
 # @todo double check schema vs scheme in all the spec.
 
@@ -820,6 +865,8 @@ definitions:
         type: boolean
       wrapped:
         type: boolean
+    extensible: true
+    extensionFieldNamesPattern: ^x-
 
   Discriminator:
     type: object

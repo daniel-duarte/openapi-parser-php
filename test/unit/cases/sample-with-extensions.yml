@@ -1,0 +1,68 @@
+openapi: 3.0.0
+x-sample: value
+
+info:
+  x-sample: value
+  contact:
+    x-sample: value
+  license:
+    x-sample: value
+
+servers:
+  - x-sample: value
+    variables:
+      var1:
+        x-sample: value
+
+paths:
+  # x-sample: value # @todo Not implemented ^x- fields yet for this object 'paths'
+  path1:
+    x-sample: value
+    get:
+      x-sample: value
+      externalDocs:
+        x-sample: value
+      parameters:
+        - x-sample: value
+          schema:
+            x-sample: value
+            xml:
+              x-sample: value
+          examples:
+            example1:
+              x-sample: value
+          content:
+            media1:
+              x-sample: value
+              encoding:
+                encoding1:
+                  x-sample: value
+                  headers:
+                    header1:
+                      x-sample: value
+      responses:
+        200:
+          links:
+            link1:
+              x-sample: value
+        default:
+          links:
+            link2:
+              x-sample: value
+      callbacks:
+        callback1:
+#          expression1: #@todo Check why this is not valid (uncommenting these 2 lines).
+#            x-sample: value
+          x-sample: value
+    parameters:
+      - x-sample: value
+        schema:
+          x-sample: value
+
+components:
+  securitySchemes:
+    - x-sample: value
+#      flows: # @todo Check why these lines does not work.
+#        x-sample: value
+#        implicit:
+#          x-sample: value
